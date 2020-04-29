@@ -116,4 +116,5 @@ if [ "$1" == "init" ]; then
     generateCerts
     generateChannelArtifacts
     ./ccp-generate.sh
+    ./env-generate.sh
 fi

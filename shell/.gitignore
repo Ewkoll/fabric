@@ -2,3 +2,4 @@ fixtures/channel-artifacts
 fixtures/crypto-config
 fixtures/orderer.order.com
 fixtures/peer0.government.peer.com
+fixtures/connection-*.json
