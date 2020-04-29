@@ -7,6 +7,7 @@ SPDX-License-Identifier: Apache-2.0
 package main
 
 import (
+	"fmt"
 	_ "net/http/pprof"
 	"os"
 	"strings"
@@ -28,7 +29,12 @@ var mainCmd = &cobra.Command{
 	Use: "peer"}
 
 func main() {
-	err := godotenv.Load("./.env.government")
+	EnvConfig := os.Getenv("CORE_PEER_ENV_CONFIG")
+	if "" == EnvConfig {
+		EnvConfig = ".env.government"
+	}
+	fmt.Println(EnvConfig)
+	err := godotenv.Load(EnvConfig)
 	if err != nil {
 		os.Exit(1)
 	}

@@ -21,7 +21,7 @@ function order_generate() {
 
 echo "$(order_generate $HOSTNAME $ORDERER_GENERAL_MSP_PATH $ORDERER_GENERAL_TLS_PATH $FABRIC_CFG_PATH $CHANNEL_ARTIFACTS $ORDERER_FILELEDGER_LOCATION)" > .env.orderer
 cp .env.orderer $BASE_PATH/../../orderer/.env
-
+cp .env.orderer $BASE_PATH/../../.build/bin/.env
 
 PEER_HOST=government.peer.com
 CORE_PEER_LISTENIP=0.0.0.0
@@ -72,7 +72,7 @@ echo "$(peer_generate $HOSTNAME \
                       $CORE_PEER_MSP_PATH \
                       $CORE_PEER_TLS_PATH )" > .env.government
 cp .env.government $BASE_PATH/../../peer/.env.government
-
+cp .env.government $BASE_PATH/../../.build/bin/.env.government
 
 PEER_HOST=public.peer.com
 CORE_PEER_LISTENIP=0.0.0.0
@@ -106,3 +106,4 @@ echo "$(peer_generate $HOSTNAME \
                       $CORE_PEER_MSP_PATH \
                       $CORE_PEER_TLS_PATH )" > .env.public
 cp .env.public $BASE_PATH/../../peer/.env.public
+cp .env.public $BASE_PATH/../../.build/bin/.env.public
