@@ -9,8 +9,18 @@ SPDX-License-Identifier: Apache-2.0
 // function should be included in this package.
 package main
 
-import "github.com/hyperledger/fabric/orderer/common/server"
+import (
+	"os"
+
+	"github.com/hyperledger/fabric/orderer/common/server"
+	"github.com/joho/godotenv"
+)
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		os.Exit(1)
+	}
+
 	server.Main()
 }

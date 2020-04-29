@@ -3,7 +3,7 @@
  # @Author: Ewkoll
  # @Description: 构建非容器模型运行的简单Fabric网络。
  # @FilePath: /fabric/shell/start.sh
- # @LastEditTime: 2020-04-28 11:06:55
+ # @LastEditTime: 2020-04-29 09:51:10
  ###
 #!/bin/bash
 
@@ -46,11 +46,20 @@ startOrder() {
 ###
  # * 启动Fabcar网络环境。
 ###
-startFirstNetwork() {
-    adjuestWorkPath fabric-samples/first-network
+startFabcar() {
+    adjuestWorkPath fabric-samples/fabcar
     echo $(pwd)
-    echo y | ./byfn.sh down
-    # echo y | ./byfn.sh up -c mychannel
+    echo y | ./startFabric.sh
+    restoreWorkPath
+}
+
+###
+ # * 停止Fabcar网络环境。
+###
+stopFabcar() {
+    adjuestWorkPath fabric-samples/fabcar
+    echo $(pwd)
+    echo y | ./stopFabric.sh
     restoreWorkPath
 }
 
@@ -58,7 +67,16 @@ startFirstNetwork() {
  # * 启动Fabcar网络环境。
 ###
 setPath() {
-    export PATH=${PWD}/build/bin:${PWD}/shell:$PATH
+    export PATH=${PWD}/.build/bin:${PWD}/shell:$PATH
+}
+
+###
+ # * 生成配置文件。
+###
+generateConfig() {
+    cd ${INIT_PATH}/shell/fixtures
+    ./init.sh init
+    restoreWorkPath
 }
 
 printHelp() {
@@ -90,8 +108,12 @@ if [ "${SubCommand}" == "download" ]; then
     downloadFabricSample
 elif [ "${SubCommand}" == "orderer" ]; then
     startOrder
-elif [ "${SubCommand}" == "first-network" ]; then
-    startFirstNetwork
+elif [ "${SubCommand}" == "fabcar_start" ]; then
+    startFabcar
+elif [ "${SubCommand}" == "fabcar_stop" ]; then
+    stopFabcar
+elif [ "${SubCommand}" == "generate" ]; then
+    generateConfig
 else
     printHelp
     exit 1

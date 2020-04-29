@@ -1,0 +1,86 @@
+{
+    "name": "connection-org-${L_ORG}",
+    "version": "1.0.0",
+    "client": {
+        "organization": "${ORG}Org",
+        "adminUser": "admin",
+		"adminPassword": "adminpw",
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "300"
+                }
+            }
+        }
+    },
+    "channels": {
+		"info-channel": {
+            "orderers": [
+                "orderer.order.com"
+            ],
+			"peers": {
+				"peer0.${L_ORG}.peer.com": {
+					"ledgerQuery": true
+				}
+			}
+		}
+	},
+    "organizations": {
+        "${ORG}Org": {
+            "mspid": "${ORG}MSP",
+            "peers": [
+                "peer0.${L_ORG}.peer.com"
+            ],
+            "orderers": [
+                "orderer.order.com"
+            ],
+            "certificateAuthorities": [
+                "ca.${L_ORG}.peer.com"
+            ],
+            "adminPrivateKey": {
+                "path": "${ADMIN_PRIKEY_PATH}",
+                "pem":"${ADMIN_PRIKEY}"
+            },
+            "signedCert": {
+                "path": "${ADMIN_CERT_PATH}",
+                "pem": "${ADMIN_CERT}"
+            }
+        }
+    },
+    "orderers": {
+        "orderer.order.com": {
+            "url": "grpcs://localhost:7050",
+            "tlsCACerts": {
+                "pem": "${ORDERER_PEM}"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "orderer.order.com",
+                "hostnameOverride": "orderer.order.com"
+            }
+        }
+    },
+    "peers": {
+        "peer0.${L_ORG}.peer.com": {
+            "url": "grpcs://localhost:${P0PORT}",
+            "tlsCACerts": {
+                "pem": "${PEERPEM}"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.${L_ORG}.peer.com",
+                "hostnameOverride": "peer0.${L_ORG}.peer.com"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca.${L_ORG}.peer.com": {
+            "url": "https://localhost:${CAPORT}",
+            "caName": "ca-org-${L_ORG}",
+            "tlsCACerts": {
+                "pem": "${CAPEM}"
+            },
+            "httpOptions": {
+                "verify": false
+            }
+        }
+    }
+}

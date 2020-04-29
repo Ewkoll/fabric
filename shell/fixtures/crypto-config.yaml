@@ -1,0 +1,58 @@
+# ---------------------------------------------------------------------------
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+---
+# ---------------------------------------------------------------------------
+# "OrdererOrgs" - Definition of organizations managing orderer nodes
+OrdererOrgs:
+  # ---------------------------------------------------------------------------
+  # Orderer
+  # ---------------------------------------------------------------------------
+  - Name: Orderer
+    Domain: order.com
+    CA:
+      Country: CN
+      Province: Sichuan
+      Locality: Chengdou
+    #EnableNodeOUs: true
+    # ---------------------------------------------------------------------------
+    # "Specs" - See PeerOrgs below for complete description
+    # ---------------------------------------------------------------------------
+    Specs:
+      - Hostname: orderer
+
+# ---------------------------------------------------------------------------
+# "PeerOrgs" - Definition of organizations managing peer nodes
+# ---------------------------------------------------------------------------
+PeerOrgs:
+  # ---------------------------------------------------------------------------
+  # Public
+  # ---------------------------------------------------------------------------
+  - Name: Public
+    Domain: public.peer.com
+    CA:
+      Country: CN
+      Province: Sichuan
+      Locality: Chengdou
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+    Users:
+      Count: 0
+  # ---------------------------------------------------------------------------
+  # Government
+  # ---------------------------------------------------------------------------
+  - Name: Government
+    Domain: government.peer.com
+    CA:
+      Country: CN
+      Province: Sichuan
+      Locality: Chengdou
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+    Users:
+      Count: 0

@@ -17,6 +17,7 @@ import (
 	"github.com/hyperledger/fabric/peer/common"
 	"github.com/hyperledger/fabric/peer/node"
 	"github.com/hyperledger/fabric/peer/version"
+	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -27,6 +28,10 @@ var mainCmd = &cobra.Command{
 	Use: "peer"}
 
 func main() {
+	err := godotenv.Load("./.env.government")
+	if err != nil {
+		os.Exit(1)
+	}
 
 	// For environment variables.
 	viper.SetEnvPrefix(common.CmdRoot)
