@@ -51,3 +51,5 @@ maven_data.xml
 
 # other
 fabric-samples
+orderer/__debug_bin
+peer_*/__debug_bin

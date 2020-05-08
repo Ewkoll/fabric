@@ -27,6 +27,7 @@ PEER_HOST=government.peer.com
 CORE_PEER_LISTENIP=0.0.0.0
 CORE_PEER_LISTENPORT=7051
 CORE_PEER_CHAINCODE_LISTENPORT=7052
+CORE_OPERATIONS_LISTENADDRESS=${CORE_PEER_LISTENIP}:9443
 
 HOSTNAME=peer0.government.peer.com
 CORE_PEER_LISTENADDRESS=${CORE_PEER_LISTENIP}:${CORE_PEER_LISTENPORT}
@@ -56,6 +57,7 @@ function peer_generate() {
         -e "s#\${CORE_PEER_FILESYSTEMPATH}#${10}#" \
         -e "s#\${CORE_PEER_MSP_PATH}#${11}#" \
         -e "s#\${CORE_PEER_TLS_PATH}#${12}#" \
+        -e "s/\${CORE_OPERATIONS_LISTENADDRESS}/${13}/" \
         .env.peer.template
 }
 
@@ -70,14 +72,16 @@ echo "$(peer_generate $HOSTNAME \
                       $CORE_PEER_LOCALMSPID \
                       $CORE_PEER_FILESYSTEMPATH \
                       $CORE_PEER_MSP_PATH \
-                      $CORE_PEER_TLS_PATH )" > .env.government
-cp .env.government $BASE_PATH/../../peer/.env.government
+                      $CORE_PEER_TLS_PATH \
+                      $CORE_OPERATIONS_LISTENADDRESS)" > .env.government
+cp .env.government $BASE_PATH/../../peer_government/.env.government
 cp .env.government $BASE_PATH/../../.build/bin/.env.government
 
 PEER_HOST=public.peer.com
 CORE_PEER_LISTENIP=0.0.0.0
 CORE_PEER_LISTENPORT=8051
 CORE_PEER_CHAINCODE_LISTENPORT=8052
+CORE_OPERATIONS_LISTENADDRESS=${CORE_PEER_LISTENIP}:9444
 
 HOSTNAME=peer0.public.peer.com
 CORE_PEER_LISTENADDRESS=${CORE_PEER_LISTENIP}:${CORE_PEER_LISTENPORT}
@@ -104,6 +108,7 @@ echo "$(peer_generate $HOSTNAME \
                       $CORE_PEER_LOCALMSPID \
                       $CORE_PEER_FILESYSTEMPATH \
                       $CORE_PEER_MSP_PATH \
-                      $CORE_PEER_TLS_PATH )" > .env.public
-cp .env.public $BASE_PATH/../../peer/.env.public
+                      $CORE_PEER_TLS_PATH \
+                      $CORE_OPERATIONS_LISTENADDRESS)" > .env.public
+cp .env.public $BASE_PATH/../../peer_public/.env.public
 cp .env.public $BASE_PATH/../../.build/bin/.env.public
