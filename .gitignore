@@ -53,3 +53,5 @@ maven_data.xml
 fabric-samples
 orderer/__debug_bin
 peer_*/__debug_bin
+shell/scripts/log.txt
+peer/info-channel.block

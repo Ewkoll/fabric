@@ -12,7 +12,7 @@ VERBOSE="$5"
 : ${DELAY:="3"}
 : ${LANGUAGE:="golang"}
 : ${TIMEOUT:="10"}
-: ${VERBOSE:="false"}
+: ${VERBOSE:="true"}
 
 COUNTER=1
 MAX_RETRY=10

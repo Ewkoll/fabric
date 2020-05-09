@@ -3,7 +3,7 @@
  # @Author: Ewkoll
  # @Description: 构建非容器模型运行的简单Fabric网络。
  # @FilePath: /fabric/shell/start.sh
- # @LastEditTime: 2020-04-29 09:51:10
+ # @LastEditTime: 2020-05-09 10:20:04
  ###
 #!/bin/bash
 
@@ -71,11 +71,20 @@ setPath() {
 }
 
 ###
- # * 生成配置文件。
+ # * 初始化生成配置文件。
 ###
-generateConfig() {
+init() {
     cd ${INIT_PATH}/shell/fixtures
     ./init.sh init
+    restoreWorkPath
+}
+
+###
+ # * 卸载配置文件。
+###
+uninit() {
+    cd ${INIT_PATH}/shell/fixtures
+    ./init.sh uninit
     restoreWorkPath
 }
 
@@ -112,8 +121,10 @@ elif [ "${SubCommand}" == "fabcar_start" ]; then
     startFabcar
 elif [ "${SubCommand}" == "fabcar_stop" ]; then
     stopFabcar
-elif [ "${SubCommand}" == "generate" ]; then
-    generateConfig
+elif [ "${SubCommand}" == "init" ]; then
+    init
+elif [ "${SubCommand}" == "uninit" ]; then
+    uninit
 else
     printHelp
     exit 1

@@ -73,9 +73,24 @@ echo "$(peer_generate $HOSTNAME \
                       $CORE_PEER_FILESYSTEMPATH \
                       $CORE_PEER_MSP_PATH \
                       $CORE_PEER_TLS_PATH \
+                      $CORE_OPERATIONS_LISTENADDRESS)" > .env.peer.government
+cp .env.peer.government $BASE_PATH/../../peer_government/.env.government
+
+CORE_PEER_MSP_PATH=${BASE_PATH}/crypto-config/peerOrganizations/${PEER_HOST}/users/Admin@government.peer.com/msp
+echo "$(peer_generate $HOSTNAME \
+                      $CORE_PEER_LISTENADDRESS \
+                      $CORE_PEER_ADDRESS \
+                      $CORE_PEER_CHAINCODELISTENADDRESS \
+                      $CORE_PEER_CHAINCODEADDRESS \
+                      $CORE_PEER_GOSSIP_BOOTSTRAP \
+                      $CORE_PEER_GOSSIP_ENDPOINT \
+                      $CORE_PEER_GOSSIP_EXTERNALENDPOINT \
+                      $CORE_PEER_LOCALMSPID \
+                      $CORE_PEER_FILESYSTEMPATH \
+                      $CORE_PEER_MSP_PATH \
+                      $CORE_PEER_TLS_PATH \
                       $CORE_OPERATIONS_LISTENADDRESS)" > .env.government
-cp .env.government $BASE_PATH/../../peer_government/.env.government
-cp .env.government $BASE_PATH/../../.build/bin/.env.government
+cp .env.government $BASE_PATH/../../peer/.env.government
 
 PEER_HOST=public.peer.com
 CORE_PEER_LISTENIP=0.0.0.0
@@ -109,6 +124,21 @@ echo "$(peer_generate $HOSTNAME \
                       $CORE_PEER_FILESYSTEMPATH \
                       $CORE_PEER_MSP_PATH \
                       $CORE_PEER_TLS_PATH \
+                      $CORE_OPERATIONS_LISTENADDRESS)" > .env.peer.public
+cp .env.peer.public $BASE_PATH/../../peer_public/.env.public
+
+CORE_PEER_MSP_PATH=${BASE_PATH}/crypto-config/peerOrganizations/${PEER_HOST}/users/Admin@public.peer.com/msp
+echo "$(peer_generate $HOSTNAME \
+                      $CORE_PEER_LISTENADDRESS \
+                      $CORE_PEER_ADDRESS \
+                      $CORE_PEER_CHAINCODELISTENADDRESS \
+                      $CORE_PEER_CHAINCODEADDRESS \
+                      $CORE_PEER_GOSSIP_BOOTSTRAP \
+                      $CORE_PEER_GOSSIP_ENDPOINT \
+                      $CORE_PEER_GOSSIP_EXTERNALENDPOINT \
+                      $CORE_PEER_LOCALMSPID \
+                      $CORE_PEER_FILESYSTEMPATH \
+                      $CORE_PEER_MSP_PATH \
+                      $CORE_PEER_TLS_PATH \
                       $CORE_OPERATIONS_LISTENADDRESS)" > .env.public
-cp .env.public $BASE_PATH/../../peer_public/.env.public
-cp .env.public $BASE_PATH/../../.build/bin/.env.public
+cp .env.public $BASE_PATH/../../peer/.env.public

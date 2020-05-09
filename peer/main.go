@@ -30,9 +30,6 @@ var mainCmd = &cobra.Command{
 
 func main() {
 	EnvConfig := os.Getenv("CORE_PEER_ENV_CONFIG")
-	if "" == EnvConfig {
-		EnvConfig = ".env.government"
-	}
 	fmt.Println(EnvConfig)
 	err := godotenv.Load(EnvConfig)
 	if err != nil {

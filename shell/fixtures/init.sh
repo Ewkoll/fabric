@@ -112,9 +112,31 @@ function generateCerts() {
     echo
 }
 
+function copyAdmin() {
+    orgName=public
+    cp crypto-config/peerOrganizations/${orgName}.peer.com/users/Admin@${orgName}.peer.com/msp/signcerts/Admin@${orgName}.peer.com-cert.pem crypto-config/peerOrganizations/${orgName}.peer.com/peers/peer0.${orgName}.peer.com/msp/admincerts/
+
+    orgName=government
+    cp crypto-config/peerOrganizations/${orgName}.peer.com/users/Admin@${orgName}.peer.com/msp/signcerts/Admin@${orgName}.peer.com-cert.pem crypto-config/peerOrganizations/${orgName}.peer.com/peers/peer0.${orgName}.peer.com/msp/admincerts/
+}
+
 if [ "$1" == "init" ]; then
-    generateCerts
-    generateChannelArtifacts
+    if [ ! -d "crypto-config" ]; then
+        generateCerts
+        copyAdmin
+    fi
+
+    if [ ! -d "channel-artifacts" ]; then
+        generateChannelArtifacts
+    fi
+
     ./ccp-generate.sh
     ./env-generate.sh
+elif [ "$1" == "uninit" ]; then
+    rm -rf crypto-config
+    rm -rf channel-artifacts
+    rm -rf orderer.order.com
+    rm -rf peer0.*.peer.com
+elif [ "$1" == "copy" ]; then
+    copyAdmin
 fi
