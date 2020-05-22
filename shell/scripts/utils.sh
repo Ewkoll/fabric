@@ -6,6 +6,8 @@ export FIXTURES_PATH=${BASE_PATH}/../fixtures
 export PATH=${BASE_PATH}/../../.build/bin:$PATH
 
 export ORDERER_CA=$FIXTURES_PATH/crypto-config/ordererOrganizations/order.com/orderers/orderer.order.com/msp/tlscacerts/tlsca.order.com-cert.pem
+export PEER0_PUBLIC_CA=$FIXTURES_PATH/crypto-config/peerOrganizations/public.peer.com/tlsca/tlsca.public.peer.com-cert.pem
+export PEER0_GOVERNMENT_CA=$FIXTURES_PATH/crypto-config/peerOrganizations/government.peer.com/tlsca/tlsca.government.peer.com-cert.pem
 
 # verify the result of the end-to-end test
 verifyResult() {
@@ -408,7 +410,7 @@ parsePeerConnectionParameters() {
     while [ "$#" -gt 0 ]; do
         setGlobals $1 $2
         ORG=$(echo "$2" | awk '{print toupper($0)}')
-        PEER="peer$1.$2"
+        PEER="Peer$1.$2"
         PEERS="$PEERS $PEER"
         PEER_CONN_PARMS="$PEER_CONN_PARMS --peerAddresses $CORE_PEER_ADDRESS"
         if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "true" ]; then

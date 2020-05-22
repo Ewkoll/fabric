@@ -139,4 +139,13 @@ elif [ "$1" == "uninit" ]; then
     rm -rf peer0.*.peer.com
 elif [ "$1" == "copy" ]; then
     copyAdmin
+elif [ "$1" == "info" ]; then
+    cd crypto-config/peerOrganizations/public.peer.com/users/Admin@public.peer.com/tls
+
+    echo "管理用户ca.crt"
+    openssl x509 -text -noout -in ca.crt
+    echo "管理用户client.crt"
+    openssl x509 -text -noout -in client.crt
+    echo "验证client.crt的签发机构"
+    openssl verify -verbose -CAFile ca.crt client.crt
 fi
