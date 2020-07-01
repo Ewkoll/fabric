@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>常见问题 | Ewkoll</title>
+
+  
+  <meta name="author" content="ideath@operatorworld.com">
+  
+
+  
+  <meta name="description" content="fabric">
+  
+
+  
+  
+  <meta name="keywords" content="常见问题">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="常见问题"/>
+
+  <meta property="og:site_name" content="Ewkoll"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Ewkoll" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">Ewkoll</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+        <li><a href="/atom.xml">订阅</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>常见问题</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric常见问题/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:30.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <ul>
+<li><p>调用peer channel create的时候，会创建$CHANNEL_NAME.block的文件在程序目录。</p>
+<ul>
+<li>调试超时，order程序通道创建成功，但是没有把数据返回回去。</li>
+<li>后续在调用的的时候，会因为版本原因，调用失败。</li>
+<li>临时解决版本，就是order程序把对应生成的本地目录删除，在启动，重新执行。这个问题先记录。</li>
+</ul>
+</li>
+<li><p>容器内安装ping</p>
+<ul>
+<li>apt-get update</li>
+<li>apt-get install iputils-ping</li>
+<li>apt-get install net-tools</li>
+<li>apt-get install telnet</li>
+<li>telnet host.docker.internal 7052</li>
+</ul>
+</li>
+<li><p>调试环境下启动链码容器，链码会连接节点的端口，会导致访问不了，因此需要调整启动容器的参数。把peer的地址修改下。</p>
+<ul>
+<li>修改环境CORE_PEER_CHAINCODEADDRESS=host.docker.internal:7052</li>
+</ul>
+</li>
+<li><p>实例化链码调用在账本中无法查询。 </p>
+  <img src="/2020/05/09/Fabric%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/no_ledger_context.png" class=""></li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/常见问题/">常见问题</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+	<section id="comment" class="comment">
+		<div id="gitalk-container"></div>
+	</section>
+	<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+	<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+	<script>
+		var gitalk = new Gitalk({
+			clientID: '66191bd90ecaf1a0e2f6',
+			clientSecret: '93495ddc6b889077b6bc80077d231cce74298f5a',
+			repo: 'fabric',
+			owner: 'Ewkoll',
+			admin: ['Ewkoll'],
+			id: decodeURI(location.pathname),
+			distractionFreeMode: false
+		})
+
+		gitalk.render('gitalk-container')
+	</script>
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2020 ideath@operatorworld.com
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Fabric基础概念 | Ewkoll</title>
+
+  
+  <meta name="author" content="ideath@operatorworld.com">
+  
+
+  
+  <meta name="description" content="fabric">
+  
+
+  
+  
+  <meta name="keywords" content="基础概念">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Fabric基础概念"/>
+
+  <meta property="og:site_name" content="Ewkoll"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Ewkoll" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">Ewkoll</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+        <li><a href="/atom.xml">订阅</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Fabric基础概念</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric基础概念/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:31.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>Organization 组织</p>
+<p>组织（organization）代表一组拥有共同信任的根证书（可以为根CA证书或中间CA证书）的成员。</p>
+<p>这个概念很重要，因为Fabric的共识是基于组织为单位的，并不是成员的节点为单位。</p>
+<p>这些成员由于共享同样的信任根，彼此之间信任度很高，可以相互交换比较敏感的内容。同一个组织的成员节点在<strong><em>网络</em></strong>中可以被认为是同一个身份，代表组织进行签名。组织中成员可以为普通成员角色或者管理员角色，后者拥有更高的权限，可以对组织配置进行修改。</p>
+<p>组织一般包括名称、ID、MSP信息、管理策略、认证采用的密码库类型、一组锚点节点位置等信息。通常情况下，多个组织为了进行数据沟通，可以加入到同一个通道中。</p>
+<p>这里就涉及到一些细化领域的定义问题：</p>
+<pre><code>&gt; 组织以行业为单位，比如中国银行、建设银行所有的银行作为一个组织。即每个银行是一个成员，节点服务托管。
+&gt; 组织以银行为单位，比如中国银行、建设银行分别为一个组织。
+
+* 这个问题的，本质上还是数据问题。
+  * 情况一：银行没有节点。
+  * 网络层面是同一个身份，当这个行业都没有自建节点的时候，并且是被三方托管的时候，就没有必要单独成为一个组织。
+
+  * 情况二：银行有节点，并且每个银行之间数据私有，不期望别的银行知道。
+  * 银行自建区块链节点，参与共识认证过程，那么每个银行都可以作为一个单独的组织。
+  * 银行要参与链码的管理相关的事务，比如，确认链码升级、共识策略变化等操作。
+  * 本质上是对区块链节点数据存在安全要求，期望独立开发区块链操作相关的应用，并且数据存储在自己的服务器上的时候。</code></pre>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/基础概念/">基础概念</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+	<section id="comment" class="comment">
+		<div id="gitalk-container"></div>
+	</section>
+	<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+	<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+	<script>
+		var gitalk = new Gitalk({
+			clientID: '66191bd90ecaf1a0e2f6',
+			clientSecret: '93495ddc6b889077b6bc80077d231cce74298f5a',
+			repo: 'fabric',
+			owner: 'Ewkoll',
+			admin: ['Ewkoll'],
+			id: decodeURI(location.pathname),
+			distractionFreeMode: false
+		})
+
+		gitalk.render('gitalk-container')
+	</script>
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2020 ideath@operatorworld.com
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Fabric-Order-启动流程 | Ewkoll</title>
+
+  
+  <meta name="author" content="ideath@operatorworld.com">
+  
+
+  
+  <meta name="description" content="fabric">
+  
+
+  
+  
+  <meta name="keywords" content="GO,Fabric">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Fabric-Order-启动流程"/>
+
+  <meta property="og:site_name" content="Ewkoll"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Ewkoll" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">Ewkoll</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+        <li><a href="/atom.xml">订阅</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Fabric-Order-启动流程</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric-Order启动流程-Erin的MacBook Pro/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:28.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">graph TB</span><br><span class="line">    Enter(入口 - &#96;peer&#x2F;main.go&#96; **) --&gt; Init(加载环境变量)</span><br><span class="line">    Init --&gt; NodeCMD(Init Node子命令)</span><br><span class="line">    NodeCMD --&gt; PreRun(PreRun &#96;common.InitCmd&#96; *)</span><br><span class="line">    PreRun --&gt; RunCheck(检查MSP类型)</span><br><span class="line">    RunCheck --&gt; aclProvider(生成ACL控制器)</span><br><span class="line">    aclProvider --&gt; platforms(平台环境-Node,Java,Go控制器)</span><br><span class="line">    platforms --&gt; DeployedCCInfoPrivider(部署链码控制器)</span><br><span class="line">    DeployedCCInfoPrivider --&gt; identityDeserializerFabtory(获取身份检查工厂)</span><br><span class="line">    identityDeserializerFabtory --&gt; metricsProvider(指标控制器)</span><br><span class="line">    metricsProvider --&gt; ledgermgmt(初始化账本)</span><br><span class="line">    ledgermgmt --&gt; serverConfig(加载服务端配置)</span><br><span class="line">    serverConfig --&gt; NewPeerServer(生成节点通信服务)</span><br><span class="line">    NewPeerServer --&gt; NewDeliverEventsServer(生成区块分发和块事件处理服务)</span><br><span class="line">    NewDeliverEventsServer --&gt; startChaincodeServer(启动容器链码服务)</span><br><span class="line">    startChaincodeServer --&gt; startAdminServer(启动管理服务)</span><br><span class="line">    startAdminServer --&gt; NewEndorserServer(生成背书服务)</span><br><span class="line">    NewEndorserServer --&gt; initGossipService(初始化流言服务)</span><br><span class="line">    initGossipService --&gt; DeploySysCCs(部署系统链码)</span><br><span class="line">    DeploySysCCs --&gt; NewLifeCycle(生成链码生命周期管理)</span><br><span class="line">    NewLifeCycle --&gt; peer.Initialize(节点初始化)</span><br><span class="line">    peer.Initialize --&gt; registerDiscoveryService(注册节点发现服务)</span><br><span class="line">    registerDiscoveryService --&gt; RegisterEndorserServer(注册背书服务)</span><br><span class="line">    RegisterEndorserServer --&gt; peerServer.Start(节点启动)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+	<section id="comment" class="comment">
+		<div id="gitalk-container"></div>
+	</section>
+	<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+	<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+	<script>
+		var gitalk = new Gitalk({
+			clientID: '66191bd90ecaf1a0e2f6',
+			clientSecret: '93495ddc6b889077b6bc80077d231cce74298f5a',
+			repo: 'fabric',
+			owner: 'Ewkoll',
+			admin: ['Ewkoll'],
+			id: decodeURI(location.pathname),
+			distractionFreeMode: false
+		})
+
+		gitalk.render('gitalk-container')
+	</script>
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2020 ideath@operatorworld.com
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

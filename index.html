@@ -1,0 +1,724 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Ewkoll</title>
+
+  
+  <meta name="author" content="ideath@operatorworld.com">
+  
+
+  
+  <meta name="description" content="fabric">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="Ewkoll"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Ewkoll" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">Ewkoll</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+        <li><a href="/atom.xml">订阅</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/05/Fabric基础/"><span>Fabric基础</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/05/Fabric基础/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-05T01:47:06.000Z">
+          2020-05-05
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h3 id="Fabric交易流程图"><a href="#Fabric交易流程图" class="headerlink" title="Fabric交易流程图"></a>Fabric交易流程图</h3><img src="/2020/05/05/Fabric%E5%9F%BA%E7%A1%80/%E4%BA%A4%E6%98%93%E6%B5%81%E7%A8%8B.png" class="">
+
+<ul>
+<li>SDK 生成 Proposal，其中包含调用链码的相关参数等信息。</li>
+<li>SDK 将 Proposal 发送到多个不同的 peer 节点。<ul>
+<li>peer 根据 Proposal 的信息，调用用户上传的链码。</li>
+<li>链码处理请求，将请求转换为对账本的读集合和写集合。</li>
+<li>peer 对读集合和写集合进行签名，并将 ProposalResponse 返回给 SDK。  </li>
+</ul>
+</li>
+<li>SDK 收到多个 peer 节点的 ProposalResponse，并将读集合与写集合和不同节点的签名拼接在一起，组成 Envelope。</li>
+<li>SDK 将 Envelope 发送给 orderer 节点，并监听 peer 节点的块事件。</li>
+<li>orderer 节点收到足够的 Envelope 后，生成新的区块，并将区块广播给所有 peer 节点。</li>
+<li>各个 peer 节点对收到区块进行验证，并向 SDK 发送新收到的区块和验证结果。</li>
+<li>SDK 根据事件中的验证结果，判断交易是否成功上链。</li>
+</ul>
+<h3 id="存储结构"><a href="#存储结构" class="headerlink" title="存储结构"></a>存储结构</h3><img src="/2020/05/05/Fabric%E5%9F%BA%E7%A1%80/%E5%8C%BA%E5%9D%97%E7%BB%93%E6%9E%84.png" class="">
+
+<h2 id="高性能"><a href="#高性能" class="headerlink" title="高性能"></a>高性能</h2><hr>
+<h3 id="避免Key冲突"><a href="#避免Key冲突" class="headerlink" title="避免Key冲突"></a>避免Key冲突</h3><p>Fabric 会记录所有失败的交易记录，因此如果2笔交易，其中一笔修改了对应 Key 的值，导致版本发生变化，后面的交易对此 Key 的修改会导致交易失败。</p>
+<p>大量的失败交易会降低 Fabric 整体的 TPS 指标，并且占用网络吞吐量。</p>
+<p>在进行链码设计时，可以通过链码的逻辑设计，减少不同交易对同一个 Key 进行写入的频率。例如，在链码调用阶段，对同一个Key进行写入的多笔不同交易，应避免间隔过短，即避免对Key进行频繁写入。建议在对该Key的上一笔写入交易成功（即 commit 到账本）后再发起下一笔写入交易。</p>
+<blockquote>
+<p>相关资料<br><a href="https://github.com/hyperledger/fabric-samples/tree/release/high-throughput" target="_blank" rel="noopener">high-throughput</a></p>
+</blockquote>
+<h3 id="减少-stub-读取和写入账本的次数"><a href="#减少-stub-读取和写入账本的次数" class="headerlink" title="减少 stub 读取和写入账本的次数"></a>减少 stub 读取和写入账本的次数</h3><p>Fabric 中的链码与 peer 节点之间的通信与 SDK 和区块链节点的通信类似，也是通过 GRPC 来进行的。当在链码中调用查询、写入账本的接口时（例如 GetState、PutState 等），链码发送 GRPC 请求给 peer 节点，等待 peer 返回结果后再返回到链码的逻辑中。当链码在一次 Query/Invoke 中调用了多次账本的查询或写入接口时，会产生一定的网络通信成本和延迟，这对网络的整体吞吐率会有一定的影响。</p>
+<p>比如：存储在 CouchDB 的数据，它是通过提供服务的方式获取数据，因此在获取数据的过程是，链码 —&gt; Peer 节点 —-&gt; CouchDB服务获取数据整体流程上会导致一定的网络开销。</p>
+<p>我们在设计应用时，应尽量减少一次 Query/Invoke 中的查询和写入账本的次数。在一些对吞吐有很高要求的特殊场景下，可以在业务层对多个 Key 及对应的 Value 进行合并，将多次读写操作变成一次操作。</p>
+<h3 id="减少链码的运算量"><a href="#减少链码的运算量" class="headerlink" title="减少链码的运算量"></a>减少链码的运算量</h3><p>当链码被调用时，会在 peer 的账本上挂一把读锁，保证链码在处理该笔交易时，账本的状态不发生改变，当新的区块产生时，peer 将账本完全锁住，直到完成账本状态的更新操作。如果我们的链码在处理交易时花费了大量时间，会让 peer 验证区块等待更长的时间，从而降低整体的吞吐量。</p>
+<p>在编写链码时，链码中最好只包含简单的逻辑、校验等必要的运算，将不太重要的逻辑放到链码外进行。</p>
+<h3 id="使用SDK的-discovery-机制"><a href="#使用SDK的-discovery-机制" class="headerlink" title="使用SDK的 discovery 机制"></a>使用SDK的 discovery 机制</h3><p>因为在多个节点收集提案的响应是需要时间的，因此，根据背书策略，选择最小数量的背书数据即可，同时修改背书的超时时间，避免长时间等待单个节点的数据导致交易执行缓慢。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric-1-调试环境搭建/"><span>Fabric调试环境搭建</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric-1-调试环境搭建/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:20.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h3 id="获取源码"><a href="#获取源码" class="headerlink" title="获取源码"></a>获取源码</h3><ul>
+<li>完成VScode、Docker、Go、Git等环境安装。</li>
+<li>拉取<a href="https://github.com/Ewkoll/fabric" target="_blank" rel="noopener">Ewkoll/fabric</a>的代码到本地。</li>
+<li>切换到1.4.6分支。</li>
+<li>切换到shell目录执行<code>./start.sh init</code></li>
+<li>目录<ul>
+<li>peer目录，用于发起通道创建，节点加入通道，链码安装、实例化等操作。</li>
+<li>peer_government节点启动。</li>
+<li>peer_public节点启动。</li>
+<li>order排序节点启动。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>此分支是使用ENV的方式实现本地启动节点，方便后续的代码调试。</p>
+</blockquote>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric-2-创建通道/"><span>Fabric创建通道</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric-2-创建通道/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:21.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric-3-节点加入通道/"><span>节点加入通道</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric-3-节点加入通道/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:22.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric-4-合约安装/"><span>Fabric合约安装</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric-4-合约安装/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:23.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric-5-合约实例化/"><span>Fabric-5-合约实例化</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric-5-合约实例化/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:24.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric-6-账本查询/"><span>Fabric账本查询</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric-6-账本查询/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:25.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric-7-交易流程/"><span>Fabric-7-交易流程</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric-7-交易流程/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:26.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric-Gossip协议/"><span>Gossip协议</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric-Gossip协议/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:27.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric-Order启动流程/"><span>Fabric-Order-启动流程</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric-Order启动流程/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:28.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+<nav class="pagination">
+  
+  
+  <a href="/page/2/" class="pagination-next">下一页</a>
+  
+</nav>
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2020 ideath@operatorworld.com
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

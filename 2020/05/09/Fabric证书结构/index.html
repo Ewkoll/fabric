@@ -1,0 +1,179 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Fabric证书结构 | Ewkoll</title>
+
+  
+  <meta name="author" content="ideath@operatorworld.com">
+  
+
+  
+  <meta name="description" content="fabric">
+  
+
+  
+  
+  <meta name="keywords" content="GO,Fabric">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="Fabric证书结构"/>
+
+  <meta property="og:site_name" content="Ewkoll"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Ewkoll" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">Ewkoll</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+        <li><a href="/atom.xml">订阅</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>Fabric证书结构</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric证书结构/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:33.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>工具默认生成结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line">├── ordererOrganizations [排序组织]</span><br><span class="line">│   └── order.com</span><br><span class="line">│       ├── ca</span><br><span class="line">│       │   ├── 51d4e0177748d40336debef3e543521f442f82b548b109cd90cbe151ef669212_sk</span><br><span class="line">│       │   └── ca.order.com-cert.pem</span><br><span class="line">│       ├── msp</span><br><span class="line">│       │   ├── admincerts</span><br><span class="line">│       │   │   └── Admin@order.com-cert.pem</span><br><span class="line">│       │   ├── cacerts</span><br><span class="line">│       │   │   └── ca.order.com-cert.pem</span><br><span class="line">│       │   └── tlscacerts</span><br><span class="line">│       │       └── tlsca.order.com-cert.pem</span><br><span class="line">│       ├── orderers</span><br><span class="line">│       │   └── orderer.order.com</span><br><span class="line">│       │       ├── msp</span><br><span class="line">│       │       │   ├── admincerts</span><br><span class="line">│       │       │   │   └── Admin@order.com-cert.pem</span><br><span class="line">│       │       │   ├── cacerts</span><br><span class="line">│       │       │   │   └── ca.order.com-cert.pem</span><br><span class="line">│       │       │   ├── keystore</span><br><span class="line">│       │       │   │   └── 180a6d9f4754eaaac2cd648668623be47e35e5c0018b927b5f82efef58a650d1_sk</span><br><span class="line">│       │       │   ├── signcerts</span><br><span class="line">│       │       │   │   └── orderer.order.com-cert.pem</span><br><span class="line">│       │       │   └── tlscacerts</span><br><span class="line">│       │       │       └── tlsca.order.com-cert.pem</span><br><span class="line">│       │       └── tls</span><br><span class="line">│       │           ├── ca.crt</span><br><span class="line">│       │           ├── server.crt</span><br><span class="line">│       │           └── server.key</span><br><span class="line">│       ├── tlsca</span><br><span class="line">│       │   ├── d98956ded7c42a4e35b668adb498ee18b93dd4d1f99e4d39a0dc8f3f78dc969f_sk</span><br><span class="line">│       │   └── tlsca.order.com-cert.pem</span><br><span class="line">│       └── users</span><br><span class="line">│           └── Admin@order.com</span><br><span class="line">│               ├── msp</span><br><span class="line">│               │   ├── admincerts</span><br><span class="line">│               │   │   └── Admin@order.com-cert.pem</span><br><span class="line">│               │   ├── cacerts</span><br><span class="line">│               │   │   └── ca.order.com-cert.pem</span><br><span class="line">│               │   ├── keystore</span><br><span class="line">│               │   │   └── 94738b964081e602b6043f0975b9b64799e450c506681d0660b047d458196462_sk</span><br><span class="line">│               │   ├── signcerts</span><br><span class="line">│               │   │   └── Admin@order.com-cert.pem</span><br><span class="line">│               │   └── tlscacerts</span><br><span class="line">│               │       └── tlsca.order.com-cert.pem</span><br><span class="line">│               └── tls</span><br><span class="line">│                   ├── ca.crt</span><br><span class="line">│                   ├── client.crt</span><br><span class="line">│                   └── client.key</span><br><span class="line">└── peerOrganizations [节点组织]</span><br><span class="line">    ├── government.peer.com </span><br><span class="line">    │   ├── ca  [组织Government的根证书和私钥]</span><br><span class="line">    │   │   ├── ca.government.peer.com-cert.pem [ca.government.peer.com]</span><br><span class="line">    │   │   └── d7a91d3adecd49c742f6cec9287783f5412d865310311de6dde3041eff432231_sk [私钥]</span><br><span class="line">    │   ├── msp [组织身份证书信息]</span><br><span class="line">    │   │   ├── admincerts</span><br><span class="line">    │   │   ├── cacerts</span><br><span class="line">    │   │   │   └── ca.government.peer.com-cert.pem [CA根证书]</span><br><span class="line">    │   │   ├── config.yaml</span><br><span class="line">    │   │   └── tlscacerts</span><br><span class="line">    │   │       └── tlsca.government.peer.com-cert.pem [TLS根证书]</span><br><span class="line">    │   ├── peers [存放属于该组织的所有Peer节点]</span><br><span class="line">    │   │   └── peer0.government.peer.com</span><br><span class="line">    │   │       ├── msp</span><br><span class="line">    │   │       │   ├── admincerts</span><br><span class="line">    │   │       │   │   └── Admin@government.peer.com-cert.pem [组织管理员的身份验证证书，节点使用此证书验证管理员。]</span><br><span class="line">    │   │       │   ├── cacerts</span><br><span class="line">    │   │       │   │   └── ca.government.peer.com-cert.pem [CA根证书]</span><br><span class="line">    │   │       │   ├── config.yaml</span><br><span class="line">    │   │       │   ├── keystore</span><br><span class="line">    │   │       │   │   └── 6900d2e33c34cfe8bc8b6413e0d587cb057337de654133ab6813eaba4bc07f17_sk [本节点的身份私钥，节点标识签名]</span><br><span class="line">    │   │       │   ├── signcerts</span><br><span class="line">    │   │       │   │   └── peer0.government.peer.com-cert.pem [节点的证书]</span><br><span class="line">    │   │       │   └── tlscacerts</span><br><span class="line">    │   │       │       └── tlsca.government.peer.com-cert.pem [TLS根证书]</span><br><span class="line">    │   │       └── tls</span><br><span class="line">    │   │           ├── ca.crt &#x3D;&#x3D; tlsca.government.peer.com-cert.pem [TLS通信CA证书]</span><br><span class="line">    │   │           ├── server.crt [TLS通信服务端证书]</span><br><span class="line">    │   │           └── server.key [TLS通信服务私钥]</span><br><span class="line">    │   ├── tlsca</span><br><span class="line">    │   │   ├── 927e236a93f0581a92ccb1c4d65dd8e9bae1e1557725d79747d60f26b874d55c_sk [TLS根证书私钥]</span><br><span class="line">    │   │   └── tlsca.government.peer.com-cert.pem [TLS根证书]</span><br><span class="line">    │   └── users [存放属于该组织的用户的实体]</span><br><span class="line">    │       └── Admin@government.peer.com</span><br><span class="line">    │           ├── msp</span><br><span class="line">    │           │   ├── admincerts</span><br><span class="line">    │           │   ├── cacerts</span><br><span class="line">    │           │   │   └── ca.government.peer.com-cert.pem [管理员签发CA根证书]</span><br><span class="line">    │           │   ├── config.yaml</span><br><span class="line">    │           │   ├── keystore</span><br><span class="line">    │           │   │   └── d0c1b5d5d6a88ea0a477b2799c8702fe4704765c8f192aadddb626e8e4128cf1_sk [组织管理员私钥]</span><br><span class="line">    │           │   ├── signcerts</span><br><span class="line">    │           │   │   └── Admin@government.peer.com-cert.pem [组织管理员证书]</span><br><span class="line">    │           │   └── tlscacerts</span><br><span class="line">    │           │       └── tlsca.government.peer.com-cert.pem</span><br><span class="line">    │           └── tls</span><br><span class="line">    │               ├── ca.crt &#x3D;&#x3D; tlsca.government.peer.com-cert.pem [组织tls根证书]</span><br><span class="line">    │               ├── client.crt [TLS通信客户端证书]</span><br><span class="line">    │               └── client.key [TLS通信客户端私钥]</span><br><span class="line">    └── public.peer.com</span><br><span class="line">        ├── ca</span><br><span class="line">        │   ├── c4752a7c5c82202eb60f2776edd506f8a12fc18a263c98333908b7982cecc348_sk</span><br><span class="line">        │   └── ca.public.peer.com-cert.pem</span><br><span class="line">        ├── msp</span><br><span class="line">        │   ├── admincerts</span><br><span class="line">        │   ├── cacerts</span><br><span class="line">        │   │   └── ca.public.peer.com-cert.pem</span><br><span class="line">        │   ├── config.yaml</span><br><span class="line">        │   └── tlscacerts</span><br><span class="line">        │       └── tlsca.public.peer.com-cert.pem</span><br><span class="line">        ├── peers</span><br><span class="line">        │   └── peer0.public.peer.com</span><br><span class="line">        │       ├── msp</span><br><span class="line">        │       │   ├── admincerts</span><br><span class="line">        │       │   │   └── Admin@public.peer.com-cert.pem</span><br><span class="line">        │       │   ├── cacerts</span><br><span class="line">        │       │   │   └── ca.public.peer.com-cert.pem</span><br><span class="line">        │       │   ├── config.yaml</span><br><span class="line">        │       │   ├── keystore</span><br><span class="line">        │       │   │   └── c3d1f75d9e6a4ab2c80ea6a27e3dd26aeb2b8a47b35ef9e39d66a6e915f33577_sk</span><br><span class="line">        │       │   ├── signcerts</span><br><span class="line">        │       │   │   └── peer0.public.peer.com-cert.pem</span><br><span class="line">        │       │   └── tlscacerts</span><br><span class="line">        │       │       └── tlsca.public.peer.com-cert.pem</span><br><span class="line">        │       └── tls</span><br><span class="line">        │           ├── ca.crt</span><br><span class="line">        │           ├── server.crt</span><br><span class="line">        │           └── server.key</span><br><span class="line">        ├── tlsca</span><br><span class="line">        │   ├── 4898d32e49c06d7045a9d2f6e5ef047ab2ec472a76fd83bcd243c36f90d9c09b_sk</span><br><span class="line">        │   └── tlsca.public.peer.com-cert.pem</span><br><span class="line">        └── users</span><br><span class="line">            └── Admin@public.peer.com</span><br><span class="line">                ├── msp</span><br><span class="line">                │   ├── admincerts</span><br><span class="line">                │   ├── cacerts</span><br><span class="line">                │   │   └── ca.public.peer.com-cert.pem</span><br><span class="line">                │   ├── config.yaml</span><br><span class="line">                │   ├── keystore</span><br><span class="line">                │   │   └── 2f4c9c32ff8ec24d7ef680407ef636b6c5802108fc16e655525939ad01a87364_sk</span><br><span class="line">                │   ├── signcerts</span><br><span class="line">                │   │   └── Admin@public.peer.com-cert.pem []</span><br><span class="line">                │   └── tlscacerts</span><br><span class="line">                │       └── tlsca.public.peer.com-cert.pem</span><br><span class="line">                └── tls</span><br><span class="line">                    ├── ca.crt</span><br><span class="line">                    ├── client.crt</span><br><span class="line">                    └── client.key</span><br></pre></td></tr></table></figure>
+
+<p>查看节点证书信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -<span class="keyword">in</span> peers/peer0.government.peer.com/msp/signcerts/peer0.government.peer.com-cert.pem -text -noout</span><br></pre></td></tr></table></figure>
+
+<p>验证节点证书的签发机构</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">openssl verify -CAfile ca/ca.government.peer.com-cert.pem peers/peer0.government.peer.com/msp/signcerts/peer0.government.peer.com-cert.pem</span><br><span class="line">peers/peer0.government.peer.com/msp/signcerts/peer0.government.peer.com-cert.pem: OK</span><br><span class="line"></span><br><span class="line">openssl x509 -text -<span class="keyword">in</span> peers/peer0.government.peer.com/msp/signcerts/peer0.government.peer.com-cert.pem | grep OU= </span><br><span class="line">        Subject: C=CN, ST=Sichuan, L=Chengdou, OU=peer, CN=peer0.government.peer.com</span><br><span class="line"></span><br><span class="line">        OU类型是peer。</span><br></pre></td></tr></table></figure>
+
+<p>验证Government组织的管理员证书签发机构。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">openssl verify -CAfile ca/ca.government.peer.com-cert.pem users/Admin@government.peer.com/msp/signcerts/Admin@government.peer.com-cert.pem </span><br><span class="line">users/Admin@government.peer.com/msp/signcerts/Admin@government.peer.com-cert.pem: OK</span><br><span class="line"></span><br><span class="line">openssl x509 -text -<span class="keyword">in</span> users/Admin@government.peer.com/msp/signcerts/Admin@government.peer.com-cert.pem | grep OU</span><br><span class="line">        Subject: C=CN, ST=Sichuan, L=Chengdou, OU=admin, CN=Admin@government.peer.com</span><br><span class="line"></span><br><span class="line">        OU类型是admin。</span><br></pre></td></tr></table></figure>
+
+<p>在Fabric中CA有2类，一类是通信层面的TLS证书。另外一个层面是节点，用户层面的证书，这块证书是涉及节点权限，用户访问权限的控制。</p>
+<p>TLS的CA表示着，访问端口的时候，需要带上对应端口使用的TLSCA证书文件。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+	<section id="comment" class="comment">
+		<div id="gitalk-container"></div>
+	</section>
+	<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+	<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+	<script>
+		var gitalk = new Gitalk({
+			clientID: '66191bd90ecaf1a0e2f6',
+			clientSecret: '93495ddc6b889077b6bc80077d231cce74298f5a',
+			repo: 'fabric',
+			owner: 'Ewkoll',
+			admin: ['Ewkoll'],
+			id: decodeURI(location.pathname),
+			distractionFreeMode: false
+		})
+
+		gitalk.render('gitalk-container')
+	</script>
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2020 ideath@operatorworld.com
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>

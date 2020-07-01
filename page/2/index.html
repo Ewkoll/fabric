@@ -1,0 +1,704 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>第 2 页 | Ewkoll</title>
+
+  
+  <meta name="author" content="ideath@operatorworld.com">
+  
+
+  
+  <meta name="description" content="fabric">
+  
+
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  
+
+  <meta property="og:site_name" content="Ewkoll"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Ewkoll" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">Ewkoll</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+        <li><a href="/atom.xml">订阅</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric-Order启动流程-Erin的MacBook Pro/"><span>Fabric-Order-启动流程</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric-Order启动流程-Erin的MacBook Pro/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:28.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">graph TB</span><br><span class="line">    Enter(入口 - &#96;peer&#x2F;main.go&#96; **) --&gt; Init(加载环境变量)</span><br><span class="line">    Init --&gt; NodeCMD(Init Node子命令)</span><br><span class="line">    NodeCMD --&gt; PreRun(PreRun &#96;common.InitCmd&#96; *)</span><br><span class="line">    PreRun --&gt; RunCheck(检查MSP类型)</span><br><span class="line">    RunCheck --&gt; aclProvider(生成ACL控制器)</span><br><span class="line">    aclProvider --&gt; platforms(平台环境-Node,Java,Go控制器)</span><br><span class="line">    platforms --&gt; DeployedCCInfoPrivider(部署链码控制器)</span><br><span class="line">    DeployedCCInfoPrivider --&gt; identityDeserializerFabtory(获取身份检查工厂)</span><br><span class="line">    identityDeserializerFabtory --&gt; metricsProvider(指标控制器)</span><br><span class="line">    metricsProvider --&gt; ledgermgmt(初始化账本)</span><br><span class="line">    ledgermgmt --&gt; serverConfig(加载服务端配置)</span><br><span class="line">    serverConfig --&gt; NewPeerServer(生成节点通信服务)</span><br><span class="line">    NewPeerServer --&gt; NewDeliverEventsServer(生成区块分发和块事件处理服务)</span><br><span class="line">    NewDeliverEventsServer --&gt; startChaincodeServer(启动容器链码服务)</span><br><span class="line">    startChaincodeServer --&gt; startAdminServer(启动管理服务)</span><br><span class="line">    startAdminServer --&gt; NewEndorserServer(生成背书服务)</span><br><span class="line">    NewEndorserServer --&gt; initGossipService(初始化流言服务)</span><br><span class="line">    initGossipService --&gt; DeploySysCCs(部署系统链码)</span><br><span class="line">    DeploySysCCs --&gt; NewLifeCycle(生成链码生命周期管理)</span><br><span class="line">    NewLifeCycle --&gt; peer.Initialize(节点初始化)</span><br><span class="line">    peer.Initialize --&gt; registerDiscoveryService(注册节点发现服务)</span><br><span class="line">    registerDiscoveryService --&gt; RegisterEndorserServer(注册背书服务)</span><br><span class="line">    RegisterEndorserServer --&gt; peerServer.Start(节点启动)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric-Peer启动流程/"><span>节点启动流程</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric-Peer启动流程/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:29.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h3 id="启动流程"><a href="#启动流程" class="headerlink" title="启动流程"></a>启动流程</h3><ul>
+<li>Fabric使用cobra的命令行工具库，viper作为参数配置库。<ul>
+<li>入口<code>peer/main.go</code><ul>
+<li>设置加载的环境变量前置。</li>
+<li>初始化子命令，节点启动命令位于子命令<code>node.Cmd()</code></li>
+</ul>
+</li>
+<li>节点命令<code>peer/node/node.go</code><ul>
+<li>节点启动之前执行<code>common.InitCmd</code></li>
+<li>节点启动命令<code>peer/node/start.go:serve()</code><ul>
+<li>检查MSP类型<code>mgmt.GetLocalMSP().GetType()</code></li>
+<li>Idemix零知识证明的MSP类型目前是不支持，因此非标准类型MSP直接退出。</li>
+</ul>
+</li>
+<li>生成aclProvider<code>aclmgmt.NewACLProvider</code></li>
+<li>Peer操作服务newOperationsSystem，提供版本，健康检查，测试接口访问。</li>
+<li>platforms相关Registry</li>
+<li><code>lsscc.DeployedCCInfoPrivider{}</code></li>
+<li><code>identityDeserializerFabtory</code></li>
+<li><code>OperationsSystem.Start()</code></li>
+<li><code>metricsProvider</code></li>
+<li><code>membershipInfoProvider</code></li>
+<li>初始化<code>ledgermgmt</code>位于<code>core/ledger/ledermgmt/ledger_mgmt.go:initialize()</code><ul>
+<li>完成账本操作相关的初始化工作。</li>
+</ul>
+</li>
+<li>chaincodeDevMode<ul>
+<li>链码开发模式重写配置。</li>
+</ul>
+</li>
+<li><code>peer.CacheConfiguration()</code> 配置信息缓存。</li>
+<li><code>serverConfig</code> 加载服务端配置</li>
+<li><code>NewPeerServer</code> 生成用户节点通信服务。</li>
+<li><code>NewDeliverEventsServer</code> 生成传输区块和块事件服务</li>
+<li><code>startChaincodeServer</code> 启动链码服务<ul>
+<li>setup local chaincode install path</li>
+<li>create chaincode specific tls CA</li>
+<li>start the chaincode specific gRPC listening service</li>
+</ul>
+</li>
+<li><code>startAdminServer</code> 启动admin操作服务默认公用peer节点端口</li>
+<li><code>NewEndorserServer</code> 生成背书服务</li>
+<li><code>initGossipService</code> 初始化流言服务</li>
+<li><code>sccp.DeploySysCCs(&quot;&quot;, ccp)</code> 部署系统链码</li>
+<li><code>NewLifeCycle</code> 初始化生命周期管理服务</li>
+<li><code>peer.Initialize</code> 节点初始化</li>
+<li><code>registerDiscoveryService</code> 注册节点发现服务</li>
+<li><code>LoadPreResetHeight</code> 检查节点账本是否重设</li>
+<li><code>RegisterEndorserServer</code> 注册背书服务</li>
+<li><code>peerServer.Start()</code> 节点服务启动</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">graph TB</span><br><span class="line">    Enter(入口 - &#96;peer&#x2F;main.go&#96; **) --&gt; Init(加载环境变量)</span><br><span class="line">    Init --&gt; NodeCMD(Init Node子命令)</span><br><span class="line">    NodeCMD --&gt; PreRun(PreRun &#96;common.InitCmd&#96; *)</span><br><span class="line">    PreRun --&gt; RunCheck(检查MSP类型)</span><br><span class="line">    RunCheck --&gt; aclProvider(生成ACL控制器)</span><br><span class="line">    aclProvider --&gt; platforms(平台环境-Node,Java,Go控制器)</span><br><span class="line">    platforms --&gt; DeployedCCInfoPrivider(部署链码控制器)</span><br><span class="line">    DeployedCCInfoPrivider --&gt; identityDeserializerFabtory(获取身份检查工厂)</span><br><span class="line">    identityDeserializerFabtory --&gt; metricsProvider(指标控制器)</span><br><span class="line">    metricsProvider --&gt; ledgermgmt(初始化账本)</span><br><span class="line">    ledgermgmt --&gt; serverConfig(加载服务端配置)</span><br><span class="line">    serverConfig --&gt; NewPeerServer(生成节点通信服务)</span><br><span class="line">    NewPeerServer --&gt; NewDeliverEventsServer(生成区块分发和块事件处理服务)</span><br><span class="line">    NewDeliverEventsServer --&gt; startChaincodeServer(启动容器链码服务)</span><br><span class="line">    startChaincodeServer --&gt; startAdminServer(启动管理服务)</span><br><span class="line">    startAdminServer --&gt; NewEndorserServer(生成背书服务)</span><br><span class="line">    NewEndorserServer --&gt; initGossipService(初始化流言服务)</span><br><span class="line">    initGossipService --&gt; DeploySysCCs(部署系统链码)</span><br><span class="line">    DeploySysCCs --&gt; NewLifeCycle(生成链码生命周期管理)</span><br><span class="line">    NewLifeCycle --&gt; peer.Initialize(节点初始化)</span><br><span class="line">    peer.Initialize --&gt; registerDiscoveryService(注册节点发现服务)</span><br><span class="line">    registerDiscoveryService --&gt; RegisterEndorserServer(注册背书服务)</span><br><span class="line">    RegisterEndorserServer --&gt; peerServer.Start(节点启动)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric常见问题/"><span>常见问题</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric常见问题/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:30.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <ul>
+<li><p>调用peer channel create的时候，会创建$CHANNEL_NAME.block的文件在程序目录。</p>
+<ul>
+<li>调试超时，order程序通道创建成功，但是没有把数据返回回去。</li>
+<li>后续在调用的的时候，会因为版本原因，调用失败。</li>
+<li>临时解决版本，就是order程序把对应生成的本地目录删除，在启动，重新执行。这个问题先记录。</li>
+</ul>
+</li>
+<li><p>容器内安装ping</p>
+<ul>
+<li>apt-get update</li>
+<li>apt-get install iputils-ping</li>
+<li>apt-get install net-tools</li>
+<li>apt-get install telnet</li>
+<li>telnet host.docker.internal 7052</li>
+</ul>
+</li>
+<li><p>调试环境下启动链码容器，链码会连接节点的端口，会导致访问不了，因此需要调整启动容器的参数。把peer的地址修改下。</p>
+<ul>
+<li>修改环境CORE_PEER_CHAINCODEADDRESS=host.docker.internal:7052</li>
+</ul>
+</li>
+<li><p>实例化链码调用在账本中无法查询。 </p>
+  <img src="/2020/05/09/Fabric%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/no_ledger_context.png" class=""></li>
+</ul>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/常见问题/">常见问题</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric基础概念/"><span>Fabric基础概念</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric基础概念/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:31.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>Organization 组织</p>
+<p>组织（organization）代表一组拥有共同信任的根证书（可以为根CA证书或中间CA证书）的成员。</p>
+<p>这个概念很重要，因为Fabric的共识是基于组织为单位的，并不是成员的节点为单位。</p>
+<p>这些成员由于共享同样的信任根，彼此之间信任度很高，可以相互交换比较敏感的内容。同一个组织的成员节点在<strong><em>网络</em></strong>中可以被认为是同一个身份，代表组织进行签名。组织中成员可以为普通成员角色或者管理员角色，后者拥有更高的权限，可以对组织配置进行修改。</p>
+<p>组织一般包括名称、ID、MSP信息、管理策略、认证采用的密码库类型、一组锚点节点位置等信息。通常情况下，多个组织为了进行数据沟通，可以加入到同一个通道中。</p>
+<p>这里就涉及到一些细化领域的定义问题：</p>
+<pre><code>&gt; 组织以行业为单位，比如中国银行、建设银行所有的银行作为一个组织。即每个银行是一个成员，节点服务托管。
+&gt; 组织以银行为单位，比如中国银行、建设银行分别为一个组织。
+
+* 这个问题的，本质上还是数据问题。
+  * 情况一：银行没有节点。
+  * 网络层面是同一个身份，当这个行业都没有自建节点的时候，并且是被三方托管的时候，就没有必要单独成为一个组织。
+
+  * 情况二：银行有节点，并且每个银行之间数据私有，不期望别的银行知道。
+  * 银行自建区块链节点，参与共识认证过程，那么每个银行都可以作为一个单独的组织。
+  * 银行要参与链码的管理相关的事务，比如，确认链码升级、共识策略变化等操作。
+  * 本质上是对区块链节点数据存在安全要求，期望独立开发区块链操作相关的应用，并且数据存储在自己的服务器上的时候。</code></pre>
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/基础概念/">基础概念</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric链码容器启动/"><span>链码容器启动</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric链码容器启动/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:32.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/09/Fabric证书结构/"><span>Fabric证书结构</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/09/Fabric证书结构/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-09T06:24:33.000Z">
+          2020-05-09
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>工具默认生成结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br></pre></td><td class="code"><pre><span class="line">├── ordererOrganizations [排序组织]</span><br><span class="line">│   └── order.com</span><br><span class="line">│       ├── ca</span><br><span class="line">│       │   ├── 51d4e0177748d40336debef3e543521f442f82b548b109cd90cbe151ef669212_sk</span><br><span class="line">│       │   └── ca.order.com-cert.pem</span><br><span class="line">│       ├── msp</span><br><span class="line">│       │   ├── admincerts</span><br><span class="line">│       │   │   └── Admin@order.com-cert.pem</span><br><span class="line">│       │   ├── cacerts</span><br><span class="line">│       │   │   └── ca.order.com-cert.pem</span><br><span class="line">│       │   └── tlscacerts</span><br><span class="line">│       │       └── tlsca.order.com-cert.pem</span><br><span class="line">│       ├── orderers</span><br><span class="line">│       │   └── orderer.order.com</span><br><span class="line">│       │       ├── msp</span><br><span class="line">│       │       │   ├── admincerts</span><br><span class="line">│       │       │   │   └── Admin@order.com-cert.pem</span><br><span class="line">│       │       │   ├── cacerts</span><br><span class="line">│       │       │   │   └── ca.order.com-cert.pem</span><br><span class="line">│       │       │   ├── keystore</span><br><span class="line">│       │       │   │   └── 180a6d9f4754eaaac2cd648668623be47e35e5c0018b927b5f82efef58a650d1_sk</span><br><span class="line">│       │       │   ├── signcerts</span><br><span class="line">│       │       │   │   └── orderer.order.com-cert.pem</span><br><span class="line">│       │       │   └── tlscacerts</span><br><span class="line">│       │       │       └── tlsca.order.com-cert.pem</span><br><span class="line">│       │       └── tls</span><br><span class="line">│       │           ├── ca.crt</span><br><span class="line">│       │           ├── server.crt</span><br><span class="line">│       │           └── server.key</span><br><span class="line">│       ├── tlsca</span><br><span class="line">│       │   ├── d98956ded7c42a4e35b668adb498ee18b93dd4d1f99e4d39a0dc8f3f78dc969f_sk</span><br><span class="line">│       │   └── tlsca.order.com-cert.pem</span><br><span class="line">│       └── users</span><br><span class="line">│           └── Admin@order.com</span><br><span class="line">│               ├── msp</span><br><span class="line">│               │   ├── admincerts</span><br><span class="line">│               │   │   └── Admin@order.com-cert.pem</span><br><span class="line">│               │   ├── cacerts</span><br><span class="line">│               │   │   └── ca.order.com-cert.pem</span><br><span class="line">│               │   ├── keystore</span><br><span class="line">│               │   │   └── 94738b964081e602b6043f0975b9b64799e450c506681d0660b047d458196462_sk</span><br><span class="line">│               │   ├── signcerts</span><br><span class="line">│               │   │   └── Admin@order.com-cert.pem</span><br><span class="line">│               │   └── tlscacerts</span><br><span class="line">│               │       └── tlsca.order.com-cert.pem</span><br><span class="line">│               └── tls</span><br><span class="line">│                   ├── ca.crt</span><br><span class="line">│                   ├── client.crt</span><br><span class="line">│                   └── client.key</span><br><span class="line">└── peerOrganizations [节点组织]</span><br><span class="line">    ├── government.peer.com </span><br><span class="line">    │   ├── ca  [组织Government的根证书和私钥]</span><br><span class="line">    │   │   ├── ca.government.peer.com-cert.pem [ca.government.peer.com]</span><br><span class="line">    │   │   └── d7a91d3adecd49c742f6cec9287783f5412d865310311de6dde3041eff432231_sk [私钥]</span><br><span class="line">    │   ├── msp [组织身份证书信息]</span><br><span class="line">    │   │   ├── admincerts</span><br><span class="line">    │   │   ├── cacerts</span><br><span class="line">    │   │   │   └── ca.government.peer.com-cert.pem [CA根证书]</span><br><span class="line">    │   │   ├── config.yaml</span><br><span class="line">    │   │   └── tlscacerts</span><br><span class="line">    │   │       └── tlsca.government.peer.com-cert.pem [TLS根证书]</span><br><span class="line">    │   ├── peers [存放属于该组织的所有Peer节点]</span><br><span class="line">    │   │   └── peer0.government.peer.com</span><br><span class="line">    │   │       ├── msp</span><br><span class="line">    │   │       │   ├── admincerts</span><br><span class="line">    │   │       │   │   └── Admin@government.peer.com-cert.pem [组织管理员的身份验证证书，节点使用此证书验证管理员。]</span><br><span class="line">    │   │       │   ├── cacerts</span><br><span class="line">    │   │       │   │   └── ca.government.peer.com-cert.pem [CA根证书]</span><br><span class="line">    │   │       │   ├── config.yaml</span><br><span class="line">    │   │       │   ├── keystore</span><br><span class="line">    │   │       │   │   └── 6900d2e33c34cfe8bc8b6413e0d587cb057337de654133ab6813eaba4bc07f17_sk [本节点的身份私钥，节点标识签名]</span><br><span class="line">    │   │       │   ├── signcerts</span><br><span class="line">    │   │       │   │   └── peer0.government.peer.com-cert.pem [节点的证书]</span><br><span class="line">    │   │       │   └── tlscacerts</span><br><span class="line">    │   │       │       └── tlsca.government.peer.com-cert.pem [TLS根证书]</span><br><span class="line">    │   │       └── tls</span><br><span class="line">    │   │           ├── ca.crt &#x3D;&#x3D; tlsca.government.peer.com-cert.pem [TLS通信CA证书]</span><br><span class="line">    │   │           ├── server.crt [TLS通信服务端证书]</span><br><span class="line">    │   │           └── server.key [TLS通信服务私钥]</span><br><span class="line">    │   ├── tlsca</span><br><span class="line">    │   │   ├── 927e236a93f0581a92ccb1c4d65dd8e9bae1e1557725d79747d60f26b874d55c_sk [TLS根证书私钥]</span><br><span class="line">    │   │   └── tlsca.government.peer.com-cert.pem [TLS根证书]</span><br><span class="line">    │   └── users [存放属于该组织的用户的实体]</span><br><span class="line">    │       └── Admin@government.peer.com</span><br><span class="line">    │           ├── msp</span><br><span class="line">    │           │   ├── admincerts</span><br><span class="line">    │           │   ├── cacerts</span><br><span class="line">    │           │   │   └── ca.government.peer.com-cert.pem [管理员签发CA根证书]</span><br><span class="line">    │           │   ├── config.yaml</span><br><span class="line">    │           │   ├── keystore</span><br><span class="line">    │           │   │   └── d0c1b5d5d6a88ea0a477b2799c8702fe4704765c8f192aadddb626e8e4128cf1_sk [组织管理员私钥]</span><br><span class="line">    │           │   ├── signcerts</span><br><span class="line">    │           │   │   └── Admin@government.peer.com-cert.pem [组织管理员证书]</span><br><span class="line">    │           │   └── tlscacerts</span><br><span class="line">    │           │       └── tlsca.government.peer.com-cert.pem</span><br><span class="line">    │           └── tls</span><br><span class="line">    │               ├── ca.crt &#x3D;&#x3D; tlsca.government.peer.com-cert.pem [组织tls根证书]</span><br><span class="line">    │               ├── client.crt [TLS通信客户端证书]</span><br><span class="line">    │               └── client.key [TLS通信客户端私钥]</span><br><span class="line">    └── public.peer.com</span><br><span class="line">        ├── ca</span><br><span class="line">        │   ├── c4752a7c5c82202eb60f2776edd506f8a12fc18a263c98333908b7982cecc348_sk</span><br><span class="line">        │   └── ca.public.peer.com-cert.pem</span><br><span class="line">        ├── msp</span><br><span class="line">        │   ├── admincerts</span><br><span class="line">        │   ├── cacerts</span><br><span class="line">        │   │   └── ca.public.peer.com-cert.pem</span><br><span class="line">        │   ├── config.yaml</span><br><span class="line">        │   └── tlscacerts</span><br><span class="line">        │       └── tlsca.public.peer.com-cert.pem</span><br><span class="line">        ├── peers</span><br><span class="line">        │   └── peer0.public.peer.com</span><br><span class="line">        │       ├── msp</span><br><span class="line">        │       │   ├── admincerts</span><br><span class="line">        │       │   │   └── Admin@public.peer.com-cert.pem</span><br><span class="line">        │       │   ├── cacerts</span><br><span class="line">        │       │   │   └── ca.public.peer.com-cert.pem</span><br><span class="line">        │       │   ├── config.yaml</span><br><span class="line">        │       │   ├── keystore</span><br><span class="line">        │       │   │   └── c3d1f75d9e6a4ab2c80ea6a27e3dd26aeb2b8a47b35ef9e39d66a6e915f33577_sk</span><br><span class="line">        │       │   ├── signcerts</span><br><span class="line">        │       │   │   └── peer0.public.peer.com-cert.pem</span><br><span class="line">        │       │   └── tlscacerts</span><br><span class="line">        │       │       └── tlsca.public.peer.com-cert.pem</span><br><span class="line">        │       └── tls</span><br><span class="line">        │           ├── ca.crt</span><br><span class="line">        │           ├── server.crt</span><br><span class="line">        │           └── server.key</span><br><span class="line">        ├── tlsca</span><br><span class="line">        │   ├── 4898d32e49c06d7045a9d2f6e5ef047ab2ec472a76fd83bcd243c36f90d9c09b_sk</span><br><span class="line">        │   └── tlsca.public.peer.com-cert.pem</span><br><span class="line">        └── users</span><br><span class="line">            └── Admin@public.peer.com</span><br><span class="line">                ├── msp</span><br><span class="line">                │   ├── admincerts</span><br><span class="line">                │   ├── cacerts</span><br><span class="line">                │   │   └── ca.public.peer.com-cert.pem</span><br><span class="line">                │   ├── config.yaml</span><br><span class="line">                │   ├── keystore</span><br><span class="line">                │   │   └── 2f4c9c32ff8ec24d7ef680407ef636b6c5802108fc16e655525939ad01a87364_sk</span><br><span class="line">                │   ├── signcerts</span><br><span class="line">                │   │   └── Admin@public.peer.com-cert.pem []</span><br><span class="line">                │   └── tlscacerts</span><br><span class="line">                │       └── tlsca.public.peer.com-cert.pem</span><br><span class="line">                └── tls</span><br><span class="line">                    ├── ca.crt</span><br><span class="line">                    ├── client.crt</span><br><span class="line">                    └── client.key</span><br></pre></td></tr></table></figure>
+
+<p>查看节点证书信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -<span class="keyword">in</span> peers/peer0.government.peer.com/msp/signcerts/peer0.government.peer.com-cert.pem -text -noout</span><br></pre></td></tr></table></figure>
+
+<p>验证节点证书的签发机构</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">openssl verify -CAfile ca/ca.government.peer.com-cert.pem peers/peer0.government.peer.com/msp/signcerts/peer0.government.peer.com-cert.pem</span><br><span class="line">peers/peer0.government.peer.com/msp/signcerts/peer0.government.peer.com-cert.pem: OK</span><br><span class="line"></span><br><span class="line">openssl x509 -text -<span class="keyword">in</span> peers/peer0.government.peer.com/msp/signcerts/peer0.government.peer.com-cert.pem | grep OU= </span><br><span class="line">        Subject: C=CN, ST=Sichuan, L=Chengdou, OU=peer, CN=peer0.government.peer.com</span><br><span class="line"></span><br><span class="line">        OU类型是peer。</span><br></pre></td></tr></table></figure>
+
+<p>验证Government组织的管理员证书签发机构。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">openssl verify -CAfile ca/ca.government.peer.com-cert.pem users/Admin@government.peer.com/msp/signcerts/Admin@government.peer.com-cert.pem </span><br><span class="line">users/Admin@government.peer.com/msp/signcerts/Admin@government.peer.com-cert.pem: OK</span><br><span class="line"></span><br><span class="line">openssl x509 -text -<span class="keyword">in</span> users/Admin@government.peer.com/msp/signcerts/Admin@government.peer.com-cert.pem | grep OU</span><br><span class="line">        Subject: C=CN, ST=Sichuan, L=Chengdou, OU=admin, CN=Admin@government.peer.com</span><br><span class="line"></span><br><span class="line">        OU类型是admin。</span><br></pre></td></tr></table></figure>
+
+<p>在Fabric中CA有2类，一类是通信层面的TLS证书。另外一个层面是节点，用户层面的证书，这块证书是涉及节点权限，用户访问权限的控制。</p>
+<p>TLS的CA表示着，访问端口的时候，需要带上对应端口使用的TLSCA证书文件。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/05/25/Fabric-Order-Broadcast处理/"><span>Fabric-Order-Broadcast处理</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/05/25/Fabric-Order-Broadcast处理/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-05-25T03:32:26.000Z">
+          2020-05-25
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p>Broadcast，广播<br>客户端将请求消息（例如完成背书后的交易）通过 gRPC 接口发送给 Ordering 服务。Orderer 进行本地验证处理后，会转化为入队消息发给后端共识模块（如 Kafka）。</p>
+<p>发给 Orderer 的 Broadcast 请求消息包括链码的实例化、调用；通道的创建、更新。</p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/GO/">GO</a><a href="/tags/Fabric/">Fabric</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/06/02/修改FabricSDK实例化超时默认300秒时间/"><span>修改FabricSDK实例化超时默认300秒时间</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/06/02/修改FabricSDK实例化超时默认300秒时间/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-06-02T07:48:10.000Z">
+          2020-06-02
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+  <article>
+
+  
+    
+    <h3 class="article-title"><a href="/2020/06/02/MVCC-READ-CONFLICT相关/"><span>MVCC_READ_CONFLICT相关</span></a></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/06/02/MVCC-READ-CONFLICT相关/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-06-02T07:56:51.000Z">
+          2020-06-02
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><a href="https://stackoverflow.com/questions/45347439/mvcc-read-conflict-when-submitting-multiple-transactions-concurrently" target="_blank" rel="noopener">StackOverflow</a></p>
+<p><a href="https://github.com/hyperledger/fabric-samples/tree/release/high-throughput" target="_blank" rel="noopener">high-throughput</a></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+
+
+
+<nav class="pagination">
+  
+  <a href="/" class="pagination-prev">上一页</a>
+  
+  
+</nav>
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2020 ideath@operatorworld.com
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>
