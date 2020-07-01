@@ -28,6 +28,7 @@ type depCCsRetriever func(Query, ChaincodePredicate, bool, ...string) (chaincode
 
 // HandleChaincodeDeploy is expected to be invoked when a chaincode is deployed via a deploy transaction and the chaicndoe was already
 // installed on the peer. This also gets invoked when an already deployed chaincode is installed on the peer
+// 啥意思？
 func (sub *Subscription) HandleChaincodeDeploy(chaincodeDefinition *cceventmgmt.ChaincodeDefinition, dbArtifactsTar []byte) error {
 	Logger.Debug("Channel", sub.channel, "got a new deployment:", chaincodeDefinition)
 	sub.Lock()

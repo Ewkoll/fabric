@@ -132,14 +132,18 @@ func InitCrypto(mspMgrConfigDir, localMSPID, localMSPType string) error {
 		return errors.New("the local MSP must have an ID")
 	}
 
+	mainLogger.Debug("SetBCCSPKeystorePath 设置BCCSP存储目录")
 	// Init the BCCSP
 	SetBCCSPKeystorePath()
+
+	mainLogger.Debug("EnhancedExactUnmarshalKey 从配置中构建bccsp配置。")
 	var bccspConfig *factory.FactoryOpts
 	err = viperutil.EnhancedExactUnmarshalKey("peer.BCCSP", &bccspConfig)
 	if err != nil {
 		return errors.WithMessage(err, "could not parse YAML config")
 	}
 
+	mainLogger.Debug("根据配置信息加载MSP")
 	err = mspmgmt.LoadLocalMspWithType(mspMgrConfigDir, bccspConfig, localMSPID, localMSPType)
 	if err != nil {
 		return errors.WithMessage(err, fmt.Sprintf("error when setting up MSP of type %s from directory %s", localMSPType, mspMgrConfigDir))
@@ -153,6 +157,8 @@ func InitCrypto(mspMgrConfigDir, localMSPID, localMSPType string) error {
 func SetBCCSPKeystorePath() {
 	viper.Set("peer.BCCSP.SW.FileKeyStore.KeyStore",
 		config.GetPath("peer.BCCSP.SW.FileKeyStore.KeyStore"))
+
+	mainLogger.Debugf("peer.BCCSP.SW.FileKeyStore.KeyStore=[%s]", config.GetPath("peer.BCCSP.SW.FileKeyStore.KeyStore"))
 }
 
 // GetDefaultSigner return a default Signer(Default/PERR) for cli
@@ -243,6 +249,7 @@ func configFromEnv(prefix string) (address, override string, clientConfig comm.C
 		UseTLS:            viper.GetBool(prefix + ".tls.enabled"),
 		RequireClientCert: viper.GetBool(prefix + ".tls.clientAuthRequired")}
 	if secOpts.UseTLS {
+		mainLogger.Debugf("获取[%s.tls.rootcert.file]证书=[%s]", prefix, config.GetPath(prefix+".tls.rootcert.file"))
 		caPEM, res := ioutil.ReadFile(config.GetPath(prefix + ".tls.rootcert.file"))
 		if res != nil {
 			err = errors.WithMessage(res,
@@ -298,6 +305,7 @@ func InitCmd(cmd *cobra.Command, args []string) {
 		Writer:  logOutput,
 		LogSpec: loggingSpec,
 	})
+	mainLogger.Debugf("loggingLevel=[%s] loggingSpec=[%s] loggingFormat=[%s]\n", loggingLevel, loggingSpec, loggingFormat)
 
 	// Init the MSP
 	var mspMgrConfigDir = config.GetPath("peer.mspConfigPath")
@@ -306,11 +314,15 @@ func InitCmd(cmd *cobra.Command, args []string) {
 	if mspType == "" {
 		mspType = msp.ProviderTypeToString(msp.FABRIC)
 	}
+	mainLogger.Debugf("mspMgrConfigDir=[%s] mspID=[%s] mspType=[%s]\n", mspMgrConfigDir, mspID, mspType)
+
+	mainLogger.Debug("初始化Peer需要的加密组件。")
 	err = InitCrypto(mspMgrConfigDir, mspID, mspType)
 	if err != nil { // Handle errors reading the config file
 		mainLogger.Errorf("Cannot run peer because %s", err.Error())
 		os.Exit(1)
 	}
 
+	mainLogger.Debugf("peer.gomaxprocs=[%d]\n", viper.GetInt("peer.gomaxprocs"))
 	runtime.GOMAXPROCS(viper.GetInt("peer.gomaxprocs"))
 }

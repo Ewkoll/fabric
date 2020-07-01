@@ -33,7 +33,7 @@ import (
 
 var (
 	// AttrOID is the ASN.1 object identifier for an attribute extension in an
-	// X509 certificate
+	// X509 certificate 这个用途是什么？
 	AttrOID = asn1.ObjectIdentifier{1, 2, 3, 4, 5, 6, 7, 8, 1}
 	// AttrOIDString is the string version of AttrOID
 	AttrOIDString = "1.2.3.4.5.6.7.8.1"

@@ -9,6 +9,7 @@ package ccintf
 //This package defines the interfaces that support runtime and
 //communication between chaincode and peer (chaincode support).
 //Currently inproccontroller uses it. dockercontroller does not.
+// 这个包定义链码和节点的通信接口。
 
 import (
 	"fmt"

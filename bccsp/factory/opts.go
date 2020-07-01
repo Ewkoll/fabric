@@ -23,8 +23,7 @@ func GetDefaultOpts() *FactoryOpts {
 		SwOpts: &SwOpts{
 			HashFamily: "SHA2",
 			SecLevel:   256,
-
-			Ephemeral: true,
+			Ephemeral:  true,
 		},
 	}
 }

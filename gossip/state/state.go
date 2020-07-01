@@ -70,14 +70,15 @@ type GossipAdapter interface {
 	// Send sends a message to remote peers
 	Send(msg *proto.GossipMessage, peers ...*comm.RemotePeer)
 
-	// Accept returns a dedicated read-only channel for messages sent by other nodes that match a certain predicate.
-	// If passThrough is false, the messages are processed by the gossip layer beforehand.
-	// If passThrough is true, the gossip layer doesn't intervene and the messages
+	// Accept returns a dedicated(专用的) read-only channel for messages sent by other nodes that match a certain(指定) predicate(条件).
+	// If passThrough is false, the messages are processed by the gossip layer beforehand. 预先用gossip协议处理。
+	// If passThrough is true, the gossip layer doesn't intervene(介入) and the messages
 	// can be used to send a reply back to the sender
 	Accept(acceptor common2.MessageAcceptor, passThrough bool) (<-chan *proto.GossipMessage, <-chan proto.ReceivedMessage)
 
 	// UpdateLedgerHeight updates the ledger height the peer
 	// publishes to other peers in the channel
+	// 更新通道中其它节点发布的账本高度？
 	UpdateLedgerHeight(height uint64, chainID common2.ChainID)
 
 	// PeersOfChannel returns the NetworkMembers considered alive
@@ -104,6 +105,7 @@ type MCSAdapter interface {
 type ledgerResources interface {
 	// StoreBlock deliver new block with underlined private data
 	// returns missing transaction ids
+	// 分发新的块，underlined，返回缺少的交易编号。
 	StoreBlock(block *common.Block, data util.PvtDataCollections) error
 
 	// StorePvtData used to persist private date into transient store
@@ -186,8 +188,9 @@ func (v *stateRequestValidator) validate(request *proto.RemoteStateRequest, batc
 	return nil
 }
 
-// NewGossipStateProvider creates state provider with coordinator instance
-// to orchestrate arrival of private rwsets and blocks before committing them into the ledger.
+// NewGossipStateProvider creates state provider with coordinator(调度) instance
+// to orchestrate(编排) arrival of private rwsets and blocks before committing them into the ledger.
+// 创建一个拥有调度实例的状态提供者，用于在提交到账本之前编排私有读写集和块数据。
 func NewGossipStateProvider(chainID string, services *ServicesMediator, ledger ledgerResources, stateMetrics *metrics.StateMetrics, config *Configuration) GossipStateProvider {
 
 	gossipChan, _ := services.Accept(func(message interface{}) bool {

@@ -13,6 +13,7 @@ import (
 )
 
 // InstalledChaincode defines metadata about an installed chaincode
+// 定义安装链码需要的元数据。
 type InstalledChaincode struct {
 	Name    string
 	Version string
@@ -20,6 +21,7 @@ type InstalledChaincode struct {
 }
 
 // Metadata defines channel-scoped metadata of a chaincode
+// 定义通道需要的元数据信息。
 type Metadata struct {
 	Name              string
 	Version           string
@@ -32,6 +34,7 @@ type Metadata struct {
 type MetadataSet []Metadata
 
 // AsChaincodes converts this MetadataSet to a slice of gossip.Chaincodes
+// 把元数据信息转换成gossip中使用的对象。
 func (ccs MetadataSet) AsChaincodes() []*gossip.Chaincode {
 	var res []*gossip.Chaincode
 	for _, cc := range ccs {

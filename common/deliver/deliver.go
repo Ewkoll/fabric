@@ -125,6 +125,7 @@ type Server struct {
 }
 
 // ExtractChannelHeaderCertHash extracts the TLS cert hash from a channel header.
+// 从通道信息头中提取证书的哈希
 func ExtractChannelHeaderCertHash(msg proto.Message) []byte {
 	chdr, isChannelHeader := msg.(*cb.ChannelHeader)
 	if !isChannelHeader || chdr == nil {
@@ -134,6 +135,7 @@ func ExtractChannelHeaderCertHash(msg proto.Message) []byte {
 }
 
 // NewHandler creates an implementation of the Handler interface.
+//
 func NewHandler(cm ChainManager, timeWindow time.Duration, mutualTLS bool, metrics *Metrics, expirationCheckDisabled bool) *Handler {
 	expirationCheck := crypto.ExpiresAt
 	if expirationCheckDisabled {

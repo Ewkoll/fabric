@@ -18,6 +18,7 @@ import (
 )
 
 // Org stores the common organizational config
+// 组织配置
 type Org interface {
 	// Name returns the name this org is referred to in config
 	Name() string
@@ -27,6 +28,7 @@ type Org interface {
 }
 
 // ApplicationOrg stores the per org application config
+// 锚节点
 type ApplicationOrg interface {
 	Org
 
@@ -72,6 +74,7 @@ type Channel interface {
 }
 
 // Consortiums represents the set of consortiums serviced by an ordering service
+// 排序服务的共识。solo->共识配置
 type Consortiums interface {
 	// Consortiums returns the set of consortiums
 	Consortiums() map[string]Consortium
@@ -87,6 +90,7 @@ type Consortium interface {
 }
 
 // Orderer stores the common shared orderer config
+// 共享大的排序节点配置信息。
 type Orderer interface {
 	// ConsensusType returns the configured consensus type
 	ConsensusType() string

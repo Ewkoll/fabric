@@ -8,7 +8,9 @@ package semaphore_test
 
 import (
 	"context"
+	"fmt"
 	"testing"
+	"time"
 
 	"github.com/hyperledger/fabric/common/semaphore"
 	. "github.com/onsi/gomega"
@@ -31,15 +33,25 @@ func TestSemaphoreBlocking(t *testing.T) {
 	done := make(chan struct{})
 	go func() {
 		err := sema.Acquire(context.Background())
+		fmt.Println("-------1")
 		gt.Expect(err).NotTo(HaveOccurred())
-
+		fmt.Println("-------2")
 		close(done)
+		fmt.Println("-------3")
 		sema.Release()
+		fmt.Println("-------4")
 	}()
 
+	fmt.Println("-------5")
 	gt.Consistently(done).ShouldNot(BeClosed())
+
+	fmt.Println("-------6")
 	sema.Release()
+	time.Sleep(5 * time.Second)
+
+	fmt.Println("-------7")
 	gt.Eventually(done).Should(BeClosed())
+	fmt.Println("-------8")
 }
 
 func TestSemaphoreContextError(t *testing.T) {

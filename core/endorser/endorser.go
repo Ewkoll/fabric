@@ -210,6 +210,7 @@ func (e *Endorser) SanitizeUserCDS(userCDS *pb.ChaincodeDeploymentSpec) (*pb.Cha
 }
 
 // SimulateProposal simulates the proposal by calling the chaincode
+// 调用链码模拟提案。
 func (e *Endorser) SimulateProposal(txParams *ccprovider.TransactionParams, cid *pb.ChaincodeID) (ccprovider.ChaincodeDefinition, *pb.Response, []byte, *pb.ChaincodeEvent, error) {
 	endorserLogger.Debugf("[%s][%s] Entry chaincode: %s", txParams.ChannelID, shorttxid(txParams.TxID), cid)
 	defer endorserLogger.Debugf("[%s][%s] Exit", txParams.ChannelID, shorttxid(txParams.TxID))
@@ -293,7 +294,7 @@ func (e *Endorser) SimulateProposal(txParams *ccprovider.TransactionParams, cid 
 	return cdLedger, res, pubSimResBytes, ccevent, nil
 }
 
-// endorse the proposal by calling the ESCC
+// endorse the proposal by calling the ESCC（Endorsement System Chaincode ）
 func (e *Endorser) endorseProposal(_ context.Context, chainID string, txid string, signedProp *pb.SignedProposal, proposal *pb.Proposal, response *pb.Response, simRes []byte, event *pb.ChaincodeEvent, visibility []byte, ccid *pb.ChaincodeID, txsim ledger.TxSimulator, cd ccprovider.ChaincodeDefinition) (*pb.ProposalResponse, error) {
 	endorserLogger.Debugf("[%s][%s] Entry chaincode: %s", chainID, shorttxid(txid), ccid)
 	defer endorserLogger.Debugf("[%s][%s] Exit", chainID, shorttxid(txid))
@@ -457,6 +458,8 @@ func (e *Endorser) ProcessProposal(ctx context.Context, signedProp *pb.SignedPro
 
 	prop, hdrExt, chainID, txid := vr.prop, vr.hdrExt, vr.chainID, vr.txid
 
+	// 为这个提案获取一次交易模拟器。这个值可以为nil当chainless proposals的时候。
+	// 同时包含一个历史记录查询器，因为交易模拟器不包含历史数据查询。
 	// obtaining once the tx simulator for this proposal. This will be nil
 	// for chainless proposals
 	// Also obtain a history query executor for history queries, since tx simulator does not cover history
@@ -467,10 +470,12 @@ func (e *Endorser) ProcessProposal(ctx context.Context, signedProp *pb.SignedPro
 			return &pb.ProposalResponse{Response: &pb.Response{Status: 500, Message: err.Error()}}, nil
 		}
 
+		// 交易模拟器会获取一个状态数据库上的共享锁，这个会影响区块的提交（有效的写集到状态数据库中），我们需要尽快的释放这个锁。
+		// 因此，交易模拟器对象在交易模拟过程中会尽快在流程传播之前收集读写集合。如何需要私有数据，
 		// txsim acquires a shared lock on the stateDB. As this would impact the block commits (i.e., commit
 		// of valid write-sets to the stateDB), we must release the lock as early as possible.
-		// Hence, this txsim object is closed in simulateProposal() as soon as the tx is simulated and
-		// rwset is collected before gossip dissemination if required for privateData. For safety, we
+		// Hence（因此）, this txsim object is closed in simulateProposal() as soon as the tx is simulated and
+		// rwset is collected before gossip dissemination（传播） if required for privateData. For safety, we
 		// add the following defer statement and is useful when an error occur. Note that calling
 		// txsim.Done() more than once does not cause any issue. If the txsim is already
 		// released, the following txsim.Done() simply returns.

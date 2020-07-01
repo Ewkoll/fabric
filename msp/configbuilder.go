@@ -172,6 +172,7 @@ func GetLocalMspConfig(dir string, bccspConfig *factory.FactoryOpts, ID string) 
 	signcertDir := filepath.Join(dir, signcerts)
 	keystoreDir := filepath.Join(dir, keystore)
 	bccspConfig = SetupBCCSPKeystoreConfig(bccspConfig, keystoreDir)
+	mspLogger.Debugf("bccspConfig=[%s] signcertDir=[%s] keystoreDir=[%s]", bccspConfig, signcertDir, keystoreDir)
 
 	err := factory.InitFactories(bccspConfig)
 	if err != nil {
@@ -179,6 +180,7 @@ func GetLocalMspConfig(dir string, bccspConfig *factory.FactoryOpts, ID string) 
 	}
 
 	signcert, err := getPemMaterialFromDir(signcertDir)
+	mspLogger.Debugf("加载PEM证书 signcertDir=[%s]\n", signcertDir)
 	if err != nil || len(signcert) == 0 {
 		return nil, errors.Wrapf(err, "could not load a valid signer certificate from directory %s", signcertDir)
 	}
@@ -190,7 +192,7 @@ func GetLocalMspConfig(dir string, bccspConfig *factory.FactoryOpts, ID string) 
 	*/
 
 	sigid := &msp.SigningIdentityInfo{PublicSigner: signcert[0], PrivateSigner: nil}
-
+	mspLogger.Debug("加载MSP配置")
 	return getMspConfig(dir, ID, sigid)
 }
 
@@ -216,16 +218,19 @@ func getMspConfig(dir string, ID string, sigid *msp.SigningIdentityInfo) (*msp.M
 	tlsintermediatecertsDir := filepath.Join(dir, tlsintermediatecerts)
 
 	cacerts, err := getPemMaterialFromDir(cacertDir)
+	mspLogger.Debugf("加载CA证书=[%s]\n", cacertDir)
 	if err != nil || len(cacerts) == 0 {
 		return nil, errors.WithMessage(err, fmt.Sprintf("could not load a valid ca certificate from directory %s", cacertDir))
 	}
 
 	admincert, err := getPemMaterialFromDir(admincertDir)
+	mspLogger.Debugf("加载管理员证书=[%s]\n", admincertDir)
 	if err != nil && !os.IsNotExist(err) {
 		return nil, errors.WithMessage(err, fmt.Sprintf("could not load a valid admin certificate from directory %s", admincertDir))
 	}
 
 	intermediatecerts, err := getPemMaterialFromDir(intermediatecertsDir)
+	mspLogger.Debugf("加载中间CA证书=[%s]\n", intermediatecertsDir)
 	if os.IsNotExist(err) {
 		mspLogger.Debugf("Intermediate certs folder not found at [%s]. Skipping. [%s]", intermediatecertsDir, err)
 	} else if err != nil {
@@ -233,6 +238,7 @@ func getMspConfig(dir string, ID string, sigid *msp.SigningIdentityInfo) (*msp.M
 	}
 
 	tlsCACerts, err := getPemMaterialFromDir(tlscacertDir)
+	mspLogger.Debugf("加载TLS证书=[%s]\n", tlscacertDir)
 	tlsIntermediateCerts := [][]byte{}
 	if os.IsNotExist(err) {
 		mspLogger.Debugf("TLS CA certs folder not found at [%s]. Skipping and ignoring TLS intermediate CA folder. [%s]", tlsintermediatecertsDir, err)
@@ -240,6 +246,7 @@ func getMspConfig(dir string, ID string, sigid *msp.SigningIdentityInfo) (*msp.M
 		return nil, errors.WithMessage(err, fmt.Sprintf("failed loading TLS ca certs at [%s]", tlsintermediatecertsDir))
 	} else if len(tlsCACerts) != 0 {
 		tlsIntermediateCerts, err = getPemMaterialFromDir(tlsintermediatecertsDir)
+		mspLogger.Debugf("加载TLS中间证书=[%s]\n", tlscacertDir)
 		if os.IsNotExist(err) {
 			mspLogger.Debugf("TLS intermediate certs folder not found at [%s]. Skipping. [%s]", tlsintermediatecertsDir, err)
 		} else if err != nil {
@@ -250,6 +257,7 @@ func getMspConfig(dir string, ID string, sigid *msp.SigningIdentityInfo) (*msp.M
 	}
 
 	crls, err := getPemMaterialFromDir(crlsDir)
+	mspLogger.Debugf("加载吊销证书=[%s]\n", crlsDir)
 	if os.IsNotExist(err) {
 		mspLogger.Debugf("crls folder not found at [%s]. Skipping. [%s]", crlsDir, err)
 	} else if err != nil {

@@ -51,6 +51,15 @@ func SetOrdererEnv(cmd *cobra.Command, args []string) {
 	viper.Set("orderer.tls.enabled", tlsEnabled)
 	viper.Set("orderer.tls.clientAuthRequired", clientAuth)
 	viper.Set("orderer.client.connTimeout", connTimeout)
+
+	mainLogger.Debugf("orderer.tls.rootcert.file=[%s]", caFile)
+	mainLogger.Debugf("orderer.tls.clientKey.file=[%s]", keyFile)
+	mainLogger.Debugf("orderer.tls.clientCert.file=[%s]", certFile)
+	mainLogger.Debugf("orderer.address=[%s]", OrderingEndpoint)
+	mainLogger.Debugf("orderer.tls.serverhostoverride=[%s]", ordererTLSHostnameOverride)
+	mainLogger.Debugf("orderer.tls.enabled=[%d]", tlsEnabled)
+	mainLogger.Debugf("oorderer.tls.clientAuthRequired=[%d]", clientAuth)
+	mainLogger.Debugf("orderer.client.connTimeout=[%d]", connTimeout)
 }
 
 // AddOrdererFlags adds flags for orderer-related commands

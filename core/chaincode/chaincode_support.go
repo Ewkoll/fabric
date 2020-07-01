@@ -133,6 +133,7 @@ func (cs *ChaincodeSupport) LaunchInit(ccci *ccprovider.ChaincodeContainerInfo) 
 // Launch starts executing chaincode if it is not already running. This method
 // blocks until the peer side handler gets into ready state or encounters a fatal
 // error. If the chaincode is already running, it simply returns.
+// 如果链码还未执行，那么启动对应链码，这个方法会阻塞等待节点获取到准备好的状态或者发生错误。
 func (cs *ChaincodeSupport) Launch(chainID, chaincodeName, chaincodeVersion string, qe ledger.QueryExecutor) (*Handler, error) {
 	cname := chaincodeName + ":" + chaincodeVersion
 	if h := cs.HandlerRegistry.Handler(cname); h != nil {
@@ -235,6 +236,7 @@ func (cs *ChaincodeSupport) ExecuteLegacyInit(txParams *ccprovider.TransactionPa
 }
 
 // Execute invokes chaincode and returns the original response.
+// 调用链码并返回原始响应。
 func (cs *ChaincodeSupport) Execute(txParams *ccprovider.TransactionParams, cccid *ccprovider.CCContext, input *pb.ChaincodeInput) (*pb.Response, *pb.ChaincodeEvent, error) {
 	resp, err := cs.Invoke(txParams, cccid, input)
 	return processChaincodeExecutionResult(txParams.TxID, cccid.Name, resp, err)

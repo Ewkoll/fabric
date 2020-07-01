@@ -79,11 +79,13 @@ func Main() {
 		return
 	}
 
+	// 载入配置
 	conf, err := localconfig.Load()
 	if err != nil {
 		logger.Error("failed to parse config: ", err)
 		os.Exit(1)
 	}
+
 	initializeLogging()
 	initializeLocalMsp(conf)
 
@@ -467,6 +469,8 @@ func initializeClusterClientConfig(conf *localconfig.TopLevel) comm.ClientConfig
 }
 
 func initializeServerConfig(conf *localconfig.TopLevel, metricsProvider metrics.Provider) comm.ServerConfig {
+	logger.Info(conf)
+
 	// secure server config
 	secureOpts := &comm.SecureOptions{
 		UseTLS:            conf.General.TLS.Enabled,

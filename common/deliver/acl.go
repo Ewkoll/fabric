@@ -23,6 +23,7 @@ type ConfigSequencer interface {
 
 // NewSessionAC creates an instance of SessionAccessControl. This constructor will
 // return an error if a signature header cannot be extracted from the envelope.
+// 为什么叫会话访问控制，验证的是签名头不能从背书信息中提取？
 func NewSessionAC(chain ConfigSequencer, env *common.Envelope, policyChecker PolicyChecker, channelID string, expiresAt ExpiresAtFunc) (*SessionAccessControl, error) {
 	signedData, err := env.AsSignedData()
 	if err != nil {
@@ -41,6 +42,7 @@ func NewSessionAC(chain ConfigSequencer, env *common.Envelope, policyChecker Pol
 // SessionAccessControl holds access control related data for a common Envelope
 // that is used to determine if a request is allowed for the identity
 // associated with the request envelope.
+//
 type SessionAccessControl struct {
 	sequencer          ConfigSequencer
 	policyChecker      PolicyChecker
@@ -54,6 +56,7 @@ type SessionAccessControl struct {
 // Evaluate uses the PolicyChecker to determine if a request should be allowed.
 // The decision is cached until the identity expires or the chain configuration
 // changes.
+// 评估访问策略。
 func (ac *SessionAccessControl) Evaluate() error {
 	if !ac.sessionEndTime.IsZero() && time.Now().After(ac.sessionEndTime) {
 		return errors.Errorf("client identity expired %v before", time.Since(ac.sessionEndTime))

@@ -24,6 +24,7 @@ import (
 )
 
 // TestAttrs tests attributes
+// 这个库的用途是用途获取证书中的扩展属性。
 func TestAttrs(t *testing.T) {
 	mgr := attrmgr.New()
 	attrs := []attrmgr.Attribute{
@@ -41,6 +42,7 @@ func TestAttrs(t *testing.T) {
 	cert := &x509.Certificate{}
 
 	// Verify that the certificate has no attributes
+	// 验证证书没有属性。
 	at, err := mgr.GetAttributesFromCert(cert)
 	if err != nil {
 		t.Fatalf("Failed to GetAttributesFromCert: %s", err)

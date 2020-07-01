@@ -28,6 +28,7 @@ type requestValidator interface {
 
 // AccessControlEvaluator evaluates whether the creator of the given SignedData
 // is eligible of using the admin service
+// 评估给定签名数据的创建者是否有资格使用管理服务
 type AccessControlEvaluator interface {
 	// Evaluate evaluates the eligibility of the creator of the given SignedData
 	// for being serviced by the admin service

@@ -13,7 +13,7 @@ import (
 )
 
 func TestGetRandomBytes(t *testing.T) {
-	_, err := GetRandomBytes(10)
+	_, err := GetRandomBytes(4098)
 
 	assert.NoError(t, err, "GetRandomBytes fails")
 }

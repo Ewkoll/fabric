@@ -11,18 +11,22 @@
 peer:
 
     # The Peer id is used for identifying this Peer instance.
+    # 识别节点实例
     id: jdoe
 
     # The networkId allows for logical seperation of networks
+    # 逻辑上分离网络
     networkId: dev
 
     # The Address at local network interface this Peer will listen on.
     # By default, it will listen on all network interfaces
+    # 节点监听网络
     listenAddress: 0.0.0.0:7051
 
     # The endpoint this peer uses to listen for inbound chaincode connections.
     # If this is commented-out, the listen address is selected to be
     # the peer's address (see below) with port 7052
+    # 用于链码连接的端口。
     # chaincodeListenAddress: 0.0.0.0:7052
 
     # The endpoint the chaincode for this peer uses to connect to the peer.
@@ -52,6 +56,7 @@ peer:
         # disconnect them
         minInterval: 60s
         # Client keepalive settings for communicating with other peer nodes
+        # 和其它节点通信的保活配置。
         client:
             # Interval is the time between pings to peer nodes.  This must
             # greater than or equal to the minInterval specified by peer
@@ -61,7 +66,7 @@ peer:
             # peer nodes before closing the connection
             timeout: 20s
         # DeliveryClient keepalive settings for communication with ordering
-        # nodes.
+        # nodes. delivery 这个意思是和Order通信的保活配置。
         deliveryClient:
             # Interval is the time between pings to ordering nodes.  This must
             # greater than or equal to the minInterval specified by ordering
@@ -132,21 +137,21 @@ peer:
         # Should we skip verifying block messages or not (currently not in use)
         skipBlockVerification: false
         # Dial timeout(unit: second)
-        dialTimeout: 3s
+        dialTimeout: 30s
         # Connection timeout(unit: second)
-        connTimeout: 2s
+        connTimeout: 20s
         # Buffer size of received messages
         recvBuffSize: 20
         # Buffer size of sending messages
         sendBuffSize: 200
         # Time to wait before pull engine processes incoming digests (unit: second)
         # Should be slightly smaller than requestWaitTime
-        digestWaitTime: 1s
+        digestWaitTime: 10s
         # Time to wait before pull engine removes incoming nonce (unit: milliseconds)
         # Should be slightly bigger than digestWaitTime
         requestWaitTime: 1500ms
         # Time to wait before pull engine ends pull (unit: second)
-        responseWaitTime: 2s
+        responseWaitTime: 20s
         # Alive check interval(unit: second)
         aliveTimeInterval: 5s
         # Alive expiration timeout(unit: second)
@@ -161,7 +166,7 @@ peer:
             # Longest time peer waits for stable membership during leader election startup (unit: second)
             startupGracePeriod: 15s
             # Interval gossip membership samples to check its stability (unit: second)
-            membershipSampleInterval: 1s
+            membershipSampleInterval: 10s
             # Time passes since last declaration message before peer decides to perform leader election (unit: second)
             leaderAliveThreshold: 10s
             # Time between peer sends propose message and declares itself as a leader (sends declaration message) (unit: second)
@@ -179,7 +184,7 @@ peer:
             transientstoreMaxBlockRetention: 1000
             # pushAckTimeout is the maximum time to wait for an acknowledgement from each peer
             # at private data push at endorsement time.
-            pushAckTimeout: 3s
+            pushAckTimeout: 30s
             # Block to live pulling margin, used as a buffer
             # to prevent peer from trying to pull private data
             # from peers that is soon to be purged in next N blocks.
@@ -207,13 +212,14 @@ peer:
             # default value is true, i.e. state transfer is active
             # and takes care to sync up missing blocks allowing
             # lagging peer to catch up to speed with rest network
+            # 
             enabled: true
             # checkInterval interval to check whether peer is lagging behind enough to
             # request blocks via state transfer from another peer.
             checkInterval: 10s
             # responseTimeout amount of time to wait for state transfer response from
             # other peers
-            responseTimeout: 3s
+            responseTimeout: 30s
             # batchSize the number of blocks to request via state transfer from another peer
             batchSize: 10
             # blockBufferSize reflect the maximum distance between lowest and
@@ -313,7 +319,7 @@ peer:
     # CLI common client config options
     client:
         # connection timeout
-        connTimeout: 3s
+        connTimeout: 30s
 
     # Delivery service related config
     deliveryclient:
@@ -322,7 +328,7 @@ peer:
         reconnectTotalTimeThreshold: 3600s
 
         # The connection timeout when connecting to ordering service nodes.
-        connTimeout: 3s
+        connTimeout: 30s
 
         # The maximum delay between consecutive connection retry attempts to
         # ordering nodes.

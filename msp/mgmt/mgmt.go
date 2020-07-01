@@ -24,11 +24,13 @@ func LoadLocalMspWithType(dir string, bccspConfig *factory.FactoryOpts, mspID, m
 		return errors.New("the local MSP must have an ID")
 	}
 
+	mspLogger.Debug("获取MSP配置")
 	conf, err := msp.GetLocalMspConfigWithType(dir, bccspConfig, mspID, mspType)
 	if err != nil {
 		return err
 	}
 
+	mspLogger.Debug("初始化本地MSP服务")
 	return GetLocalMSP().Setup(conf)
 }
 

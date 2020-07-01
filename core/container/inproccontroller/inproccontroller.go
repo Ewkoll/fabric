@@ -176,6 +176,7 @@ func (ipc *inprocContainer) launchInProc(id string, args []string, env []string)
 	}()
 
 	// shadow function to avoid data race
+	// 避免数据竞争的影子函数
 	inprocLoggerErrorf := _inprocLoggerErrorf
 	go func() {
 		defer close(ccsupportchan)

@@ -1,10 +1,13 @@
 ###
- # @Date: 2020-04-28 09:32:59
+ # @Date: 2020-04-28 12:01:25
  # @Author: Ewkoll
+ # @Email: ideath@operatorworld.com
  # @Description: 构建非容器模型运行的简单Fabric网络。
+ # @License: Apache-2.0
  # @FilePath: /fabric/shell/start.sh
- # @LastEditTime: 2020-05-09 10:20:04
- ###
+ # @LastEditTime: 2020-06-30 14:04:55
+### 
+ 
 #!/bin/bash
 
 cd ../
@@ -33,14 +36,6 @@ restoreWorkPath() {
 ###
 downloadFabricSample() {
     scripts/bootstrap.sh -d -b
-}
-
-###
- # * 启动Order节点。
-###
-startOrder() {
-   set -x
-   set +x
 }
 
 ###
@@ -115,8 +110,6 @@ done
 
 if [ "${SubCommand}" == "download" ]; then
     downloadFabricSample
-elif [ "${SubCommand}" == "orderer" ]; then
-    startOrder
 elif [ "${SubCommand}" == "fabcar_start" ]; then
     startFabcar
 elif [ "${SubCommand}" == "fabcar_stop" ]; then

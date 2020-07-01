@@ -32,6 +32,7 @@ func GetRandomBytes(len int) ([]byte, error) {
 	key := make([]byte, len)
 
 	// TODO: rand could fill less bytes then len
+	// https://segmentfault.com/a/1190000019484180 怎么会出现读取小于长度的情况。
 	_, err := rand.Read(key)
 	if err != nil {
 		return nil, errors.Wrap(err, "error getting random bytes")

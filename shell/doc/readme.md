@@ -4,7 +4,7 @@
  * @Email: ideath@operatorworld.com
  * @Description: 常见错误信息。
  * @FilePath: /fabric/shell/doc/readme.md
- * @LastEditTime: 2020-04-28 16:25:03
+ * @LastEditTime: 2020-06-30 11:30:19
  -->
 
 # 常见错误
