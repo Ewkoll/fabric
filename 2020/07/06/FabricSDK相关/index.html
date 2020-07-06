@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>FabricSDK相关 | Ewkoll</title>
+
+  
+  <meta name="author" content="ideath@operatorworld.com">
+  
+
+  
+  <meta name="description" content="fabric">
+  
+
+  
+  
+  <meta name="keywords" content="SDK相关">
+  
+
+  <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta property="og:title" content="FabricSDK相关"/>
+
+  <meta property="og:site_name" content="Ewkoll"/>
+
+  
+  <meta property="og:image" content="/favicon.ico"/>
+  
+
+  <link href="/favicon.ico" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Ewkoll" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+
+<body>
+<div class="blog">
+  <div class="content">
+
+    <header>
+  <div class="site-branding">
+    <h1 class="site-title">
+      <a href="/">Ewkoll</a>
+    </h1>
+    <p class="site-description"></p>
+  </div>
+  <nav class="site-navigation">
+    <ul>
+      
+        <li><a href="/">主页</a></li>
+      
+        <li><a href="/archives">归档</a></li>
+      
+        <li><a href="/about">关于</a></li>
+      
+        <li><a href="/atom.xml">订阅</a></li>
+      
+    </ul>
+  </nav>
+</header>
+
+    <main class="site-main posts-loop">
+    <article>
+
+  
+    
+    <h3 class="article-title"><span>FabricSDK相关</span></h3>
+    
+  
+
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2020/07/06/FabricSDK相关/" rel="bookmark">
+        <time class="entry-date published" datetime="2020-07-06T07:22:32.000Z">
+          2020-07-06
+        </time>
+      </a>
+    </span>
+  </div>
+
+
+  
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <p><strong>整理一些看SDK实现时候有意思的代码</strong></p>
+<p>在Fabric的SDK的新的版本，引入了Gateway在后续版本中建议使用此模块来访问Fabric网络，因为这个库简化了高可以的访问。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; fabric-network&#x2F;lib&#x2F;gateway.js</span><br><span class="line"></span><br><span class="line">constructor() &#123;</span><br><span class="line">    this.options &#x3D; &#123;</span><br><span class="line">        queryHandlerOptions: &#123;</span><br><span class="line">            strategy: QueryStrategies.MSPID_SCOPE_SINGLE</span><br><span class="line">        &#125;,</span><br><span class="line">        eventHandlerOptions: &#123;</span><br><span class="line">            commitTimeout: 300, &#x2F;&#x2F; 5 minutes 这个是修改SDK等待超时行为。</span><br><span class="line">            strategy: EventStrategies.MSPID_SCOPE_ALLFORTX</span><br><span class="line">        &#125;,</span><br><span class="line">        discovery: &#123;</span><br><span class="line">            enabled: Client.getConfigSetting(&#39;initialize-with-discovery&#39;, true)</span><br><span class="line">        &#125;,</span><br><span class="line">        checkpointer: &#123;</span><br><span class="line">            factory: CheckpointFactories.FILE_SYSTEM_CHECKPOINTER,</span><br><span class="line">            options: &#123;&#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        eventHubSelectionOptions: &#123;</span><br><span class="line">            strategy: EventHubSelectionStrategies.MSPID_SCOPE_ROUND_ROBIN,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 其中QueryStrategies.MSPID_SCOPE_SINGLE</span><br><span class="line">&#x2F;**</span><br><span class="line"> * @typedef DefaultQueryHandlerStrategies</span><br><span class="line"> * @memberof module:fabric-network</span><br><span class="line"> * @property &#123;function&#125; MSPID_SCOPE_SINGLE Query any one of the event hubs for the connected organisation. Continue</span><br><span class="line"> * to use the same event hub for all queries unless it fails. 查询通过所连接组织的任何一个活动节点。每次查询都使用相同的节点，除非发生查询失败。</span><br><span class="line"> * @property &#123;function&#125; MSPID_SCOPE_ROUND_ROBIN Query any one of the event hubs for the connected organisation.</span><br><span class="line"> * Use the next available peer for each successive query. 查询通过所连接组织的任何一个活动节点。在每次成功查询之后使用下一个有效的节点。</span><br><span class="line"> *&#x2F;</span><br><span class="line"></span><br><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">	MSPID_SCOPE_SINGLE,</span><br><span class="line">	MSPID_SCOPE_ROUND_ROBIN</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 事件策略，默认是等待同一个组织下的所有节点响应事件。</span><br><span class="line">&#x2F;**</span><br><span class="line"> * @typedef DefaultEventHandlerStrategies</span><br><span class="line"> * @memberof module:fabric-network</span><br><span class="line"> * @property MSPID_SCOPE_ALLFORTX Listen for transaction commit events from all peers in the client identity&#39;s</span><br><span class="line"> * organization. 侦听来自客户端标识组织中所有对等方的事务提交事件。</span><br><span class="line"> * The [submitTransaction]&#123;@link module:fabric-network.Contract#submitTransaction&#125; function will wait until successful </span><br><span class="line"> * events are received from &lt;em&gt;all&lt;&#x2F;em&gt; currently connected peers (minimum 1). 函数将等待，直到从所有当前连接的对等方接收到成功的事件（至少1个）。</span><br><span class="line"> * @property MSPID_SCOPE_ANYFORTX Listen for transaction commit events from all peers in the client identity&#39;s</span><br><span class="line"> * organization.</span><br><span class="line"> * The [submitTransaction]&#123;@link module:fabric-network.Contract#submitTransaction&#125; function will wait until a</span><br><span class="line"> * successful event is received from &lt;em&gt;any&lt;&#x2F;em&gt; peer. 函数将一直等到从任何对等方接收到成功的事件。</span><br><span class="line"> * @property NETWORK_SCOPE_ALLFORTX Listen for transaction commit events from all peers in the network.</span><br><span class="line"> * 侦听来自网络中所有对等方的事务提交事件。</span><br><span class="line"> * The [submitTransaction]&#123;@link module:fabric-network.Contract#submitTransaction&#125; function will wait until successful</span><br><span class="line"> * events are received from &lt;em&gt;all&lt;&#x2F;em&gt; currently connected peers (minimum 1). 函数将等待，直到从所有当前连接的对等方接收到成功的事件（至少1个）。</span><br><span class="line"> * @property NETWORK_SCOPE_ANYFORTX Listen for transaction commit events from all peers in the network.</span><br><span class="line"> * The [submitTransaction]&#123;@link module:fabric-network.Contract#submitTransaction&#125; function will wait until a</span><br><span class="line"> * successful event is received from &lt;em&gt;any&lt;&#x2F;em&gt; peer. 函数将一直等到从任何对等方接收到成功的事件。</span><br><span class="line"> *&#x2F;</span><br><span class="line"></span><br><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">	MSPID_SCOPE_ALLFORTX,</span><br><span class="line">	MSPID_SCOPE_ANYFORTX,</span><br><span class="line">	NETWORK_SCOPE_ALLFORTX,</span><br><span class="line">	NETWORK_SCOPE_ANYFORTX</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line"> * Handles events for a given transaction. Used to wait for a submitted transaction to be successfully commited to</span><br><span class="line"> * the ledger.</span><br><span class="line"> * Delegates to an event strategy to decide whether events or errors received should be interpreted as success or</span><br><span class="line"> * failure of a transaction.</span><br><span class="line"> * 委托给事件策略，以决定接收到的事件或错误是应解释为事务成功还是事务失败。</span><br><span class="line"> * @private </span><br><span class="line"> *&#x2F;</span><br><span class="line">class TransactionEventHandler &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>区块链交互本质上和网络交互存在一个相同的问题，当发生在区块链层面的数据提交发生成功或者失败的时候。<br>业务层面，应该如何避免数据不一致的问题。<br>例如：<br>A程序，发出一个请求。<br>B程序开始处理。<br>A程序，故意崩溃。<br>A程序重启后，如何处理在崩溃瞬间的任务处理策略，是应该重试还是修正。<br>区块链本质上存在一个问题，CAP问题，没有事务，如何解决最终一致性问题，并且有效的返回前端用户正确的响应，是我们应该考虑和解决的问题。<br>传统的分布式事务和区块链存在差异，传统事务是可以重试，区块链在成功之后，不应该重试，重试会导致区块链网络存在新的记录。</p>
+</blockquote>
+<p><strong>整个本质上还是分布式事务处理问题</strong></p>
+<p>CAP在区块链上的问题，个人觉得使用ebay的方案就可以了。支付宝DTS方案，基于2PC模式肯定也不适合区块链场景。</p>
+<p>蘑菇街的方案个人感觉比较适合常规的分布式事务的处理，理解起来比较简单，不过在真实的场景实现应该还有很多细节。</p>
+<p><strong><em>执行操作</em></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">Generate Blockchain Transaction Id</span><br><span class="line"></span><br><span class="line">Begin Transaction</span><br><span class="line">    Insert Into TransactionRecord (Transaction Id, Transaction Data)</span><br><span class="line">    Queue Message (Transaction Id, Transaction Data)</span><br><span class="line">End Transaction</span><br><span class="line"></span><br><span class="line">Result &#x3D; Execte Blockchain Commit Event</span><br><span class="line"></span><br><span class="line">If Result Failed</span><br><span class="line">    # 如果发生失败，移除队列信息。</span><br><span class="line">    Begin Transaction</span><br><span class="line">        Remove Queue Transaction Id</span><br><span class="line">        return Failed Message</span><br><span class="line">    End Transaction</span><br><span class="line">Else</span><br><span class="line">    Begin Transaction</span><br><span class="line">        Get Other Data Form Query Result</span><br><span class="line">        Insert Into Other Data To DB</span><br><span class="line">        Remove Queue Transaction Id</span><br><span class="line">        return Success Message</span><br><span class="line">    End Transaction</span><br><span class="line">End</span><br></pre></td></tr></table></figure>
+
+<p><strong><em>重启后执行</em></strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">For each message in queue</span><br><span class="line"></span><br><span class="line">    Peek message</span><br><span class="line"></span><br><span class="line">    # 区块链网络上查询对应的区块ID。</span><br><span class="line">    Execte Blockchain Query Transaction ID</span><br><span class="line"></span><br><span class="line">    # 存在表示交易执行成功</span><br><span class="line">    If Exist </span><br><span class="line">        Begin Transaction</span><br><span class="line">            Get Other Data Form Query Result</span><br><span class="line">            Insert Into Other Data To DB</span><br><span class="line">            Remove Queue Transaction Id</span><br><span class="line">        End Transaction</span><br><span class="line">    # 这里不在执行重试。</span><br><span class="line">    Else</span><br><span class="line">        Begin Transaction</span><br><span class="line">            Remove Queue Transaction Id</span><br><span class="line">        End Transaction</span><br><span class="line">    End If</span><br><span class="line">End for</span><br></pre></td></tr></table></figure>
+
+<p>浏览器接口行为，当多台负载的情况下，一个崩溃后会导致数据重试到其它服务器，这个时候区块链层面的交易ID是不同的。<br>因此，不能在崩溃重启的时候，直接重写旧的交易数据，因此区块链只兜底，在区块链数据已经写入的情况，中心化数据库没有写入时的数据一致。</p>
+<p>基于用户会话的接口控制，必须保证用户同时只能登录一个地方，这个有可能不符合需求，比如需要浏览器，手机同时登录，这个时候，如果不是公用Token的处理模式，就会导致存在问题。</p>
+<p><strong>解决在多台服务负载的情况下，保证数据一致性</strong></p>
+
+      
+    </div>
+
+  </div>
+
+  <div class="article-footer">
+    <div class="article-meta pull-left">
+
+    
+      
+
+    <span class="post-categories">
+      <i class="icon-categories"></i>
+        <a href="/categories/Fabric/">Fabric</a>
+    </span>
+    
+
+    
+    
+
+    <span class="post-tags">
+      <i class="icon-tags"></i>
+        <a href="/tags/SDK相关/">SDK相关</a>
+    </span>
+    
+
+    </div>
+
+    
+  </div>
+</article>
+
+  
+	<section id="comment" class="comment">
+		<div id="gitalk-container"></div>
+	</section>
+	<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+	<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+	<script>
+		var gitalk = new Gitalk({
+			clientID: '66191bd90ecaf1a0e2f6',
+			clientSecret: '93495ddc6b889077b6bc80077d231cce74298f5a',
+			repo: 'fabric',
+			owner: 'Ewkoll',
+			admin: ['Ewkoll'],
+			id: decodeURI(location.pathname),
+			distractionFreeMode: false
+		})
+
+		gitalk.render('gitalk-container')
+	</script>
+
+
+
+
+
+
+
+    </main>
+
+    <footer class="site-footer">
+  <p class="site-info">
+    Proudly powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and
+    Theme by <a href="https://github.com/CodeDaraW/Hacker" target="_blank">Hacker</a>
+    </br>
+    
+    &copy; 2020 ideath@operatorworld.com
+    
+  </p>
+</footer>
+    
+  </div>
+</div>
+</body>
+</html>
